@@ -17,7 +17,7 @@ int main(void) {
     placeShip(&board, &ship2, (Coordinate) { 1, 4 });
 
     fire(&board, (Coordinate) { 3, 4 });
-    fire(&board, (Coordinate) { 1,4 });
+    fire(&board, (Coordinate) { 1,4  });
     fire(&board, (Coordinate) { 0,0 });
 
     printBoard(&board);
