@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void initShip(Ship* ship, enum Ship_Type type, enum Orientation orientation) {
+void initShip(Ship* ship, Ship_Type type, Orientation orientation) {
     int i;
 
     ship->type = type;
@@ -11,7 +11,7 @@ void initShip(Ship* ship, enum Ship_Type type, enum Orientation orientation) {
     ship->hits = 0;
 }
 
-void initShipWithName(Ship* ship, enum Ship_Type type, enum Orientation orientation, char* name) {
+void initShipWithName(Ship* ship, Ship_Type type, Orientation orientation, char* name) {
     initShip(ship, type, orientation);
     ship->name = name;
 }

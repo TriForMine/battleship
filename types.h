@@ -6,34 +6,46 @@
 #ifndef BATTLESHIP_TYPES_H
 #define BATTLESHIP_TYPES_H
 
-enum State {
+typedef enum {
     WATER = 0,
     MINE = 1,
     SHIP = 2
-};
+} State;
 
-enum Ship_Type {
+typedef enum {
     FRIGATE = 1,
     DESTROYER = 2,
     CRUISER = 3,
     BATTLESHIP = 4,
     CARRIER = 5
-};
+} Ship_Type;
 
-enum Orientation {
+typedef enum {
     HORIZONTAL,
     VERTICAL
-};
+} Orientation;
+
+typedef enum {
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT
+} Direction;
+
+typedef enum {
+    Player1,
+    Player2
+} GameTurn;
 
 typedef struct {
-    int x;
-    int y;
+    unsigned int x;
+    unsigned int y;
 } Coordinate;
 
 /* Ship */
 typedef struct {
-    enum Ship_Type type;
-    enum Orientation orientation;
+    Ship_Type type;
+    Orientation orientation;
     char* name;
     /* Bitfields of hits */
     int hits;
@@ -43,7 +55,7 @@ typedef struct {
 /* Tile */
 typedef struct {
     Ship* ship;
-    enum State state;
+    State state;
 } Tile;
 
 /* Board */
@@ -52,5 +64,12 @@ typedef struct {
     int WIDTH;
     int HEIGHT;
 } Board;
+
+/* Game */
+typedef struct {
+    Board* board1;
+    Board* board2;
+    GameTurn turn;
+} Game;
 
 #endif

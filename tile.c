@@ -8,7 +8,7 @@ void initTile(Tile* tile) {
     tile->ship = NULL;
 }
 
-void setTileState(Tile* tile, enum State state) {
+void setTileState(Tile* tile, State state) {
     tile->state = state;
 }
 
@@ -17,14 +17,24 @@ void setTileShip(Tile* tile, Ship* ship) {
     tile->ship = ship;
 }
 
-void resetTile(Tile* tile) {
+void removeTileShip(Tile* tile) {
     tile->state = WATER;
     tile->ship = NULL;
+}
+
+
+void resetTile(Tile* tile) {
+    if(tile->state == SHIP) {
+        tile->ship = NULL;
+    }
+    tile->state = WATER;
 }
 
 void freeTile(Tile* tile) {
     if (tile->ship != NULL) {
         freeShip(tile->ship);
+    }
+    if (tile->ship != NULL) {
         free(tile->ship);
     }
     tile->ship = NULL;

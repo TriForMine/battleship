@@ -20,6 +20,7 @@ Ship* getShip(Board* board, Coordinate position);
 void printBoard(Board* board);
 
 /* Movements */
+void moveShip(Board* board, Ship* ship, Direction direction);
 void moveUp(Board* board, Coordinate position);
 void moveDown(Board* board, Coordinate position);
 void moveLeft(Board* board, Coordinate position);

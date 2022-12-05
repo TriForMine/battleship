@@ -1,5 +1,5 @@
 #include "board.h"
-#include "ship.h"
+#include "const.h"
 #include "tile.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -57,6 +57,8 @@ void placeShip(Board* board, Ship* ship, Coordinate position) {
             setTileShip(&board->tiles[current.x + current.y * board->WIDTH], ship);
         }
     }
+
+    ship->head = position;
 }
 
 void placeMine(Board* board, Coordinate position) {
@@ -90,27 +92,26 @@ void printBoard(Board* board) {
                 case SHIP:
                     ship = getShip(board, (Coordinate){x, y});
                     head=ship->head;
-                    /* affiche le hits du bateau*/
 
                     if (ship->orientation == HORIZONTAL) {
 
-                        if (ship->hits>>x-head.x&1) {
-                            printf("\033[31m☒\033[0m ");
+                        if (ship->hits>>(x-head.x)&1) {
+                            printf( ANSI_COLOR_RED"□"ANSI_COLOR_RESET" ");
                         } else {
-                            printf("\033[31m■\033[0m ");
+                            printf("■ ");
                         }
                     }
                     else {
-                        if (ship->hits>>y-head.y&1) {
-                            printf("\033[31m☒\033[0m ");
+                        if (ship->hits>>(y-head.y)&1) {
+                            printf(ANSI_COLOR_RED"□"ANSI_COLOR_RESET" ");
                         } else {
-                            printf("\033[31m■\033[0m ");
+                            printf("■ ");
                         }
                     }
 
                     break;
                 case MINE:
-                    printf("⚠ ");
+                    printf(ANSI_COLOR_YELLOW"⚠"ANSI_COLOR_RESET" ");
                     break;
                 default:
                     printf("  ");
@@ -122,12 +123,81 @@ void printBoard(Board* board) {
 }
 
 /* Movements */
+void moveShip(Board* board, Ship* ship, Direction direction) {
+    int i;
+    Coordinate current;
+    Coordinate position;
+    position = ship->head;
+
+    switch (direction) {
+        case UP:
+            position.y -= 1;
+            break;
+        case DOWN:
+            position.y += 1;
+            break;
+        case LEFT:
+            position.x -= 1;
+            break;
+        case RIGHT:
+            position.x += 1;
+            break;
+    }
+
+    if (ship->orientation == HORIZONTAL) {
+        switch (direction) {
+            case UP:
+                removeTileShip(&board->tiles[position.x + ship->type + position.y * board->WIDTH]);
+                setTileShip(&board->tiles[position.x + position.y * board->WIDTH], ship);
+                break;
+            case DOWN:
+                removeTileShip(&board->tiles[ship->head.x + position.y * board->WIDTH]);
+                setTileShip(&board->tiles[position.x + ship->type - 1 + position.y * board->WIDTH], ship);
+                break;
+            case LEFT:
+                for (i = 0; i < ship->type; ++i) {
+                    current.x = position.x + i;
+                    current.y = position.y;
+                    removeTileShip(&board->tiles[current.x + (current.y + (ship->head.x - position.x) + (ship->head.y - position.y)) * board->WIDTH]);
+                    setTileShip(&board->tiles[current.x + current.y * board->WIDTH], ship);
+                }
+            case RIGHT:
+                for (i = 0; i < ship->type; ++i) {
+                    current.x = position.x + i;
+                    current.y = position.y;
+                    removeTileShip(&board->tiles[current.x + (current.y + ship->head.y) * board->WIDTH]);
+                    setTileShip(&board->tiles[current.x + current.y * board->WIDTH], ship);
+                }
+                break;
+        }
+    } else {
+        if (position.x == ship->head.x) {
+            if (position.y > ship->head.y) {
+                removeTileShip(&board->tiles[position.x + ship->head.y * board->WIDTH]);
+                setTileShip(&board->tiles[position.x + (position.y + ship->type - 1) * board->WIDTH], ship);
+            } else {
+                removeTileShip(&board->tiles[position.x + (position.y + ship->type) * board->WIDTH]);
+                setTileShip(&board->tiles[position.x + position.y * board->WIDTH], ship);
+            }
+        } else {
+            for (i = 0; i < ship->type; ++i) {
+                current.x = position.x;
+                current.y = position.y + i;
+                removeTileShip(&board->tiles[current.x + (ship->head.x - position.x) + (current.y + (ship->head.y - position.y)) * board->WIDTH]);
+                setTileShip(&board->tiles[current.x + current.y * board->WIDTH], ship);
+            }
+        }
+    }
+
+    ship->head = position;
+}
+
 void moveUp(Board* board, Coordinate position) {
+    int i;
     Ship* ship = getShip(board, position);
     if (ship != NULL) {
         if (position.y > 0) {
-            resetTile(&board->tiles[position.x + position.y * board->WIDTH]);
-            setTileShip(&board->tiles[position.x + (position.y - 1) * board->WIDTH], ship);
+            moveShip(board, ship, UP);
         }
     }
 }
@@ -136,8 +206,7 @@ void moveDown(Board* board, Coordinate position) {
     Ship* ship = getShip(board, position);
     if (ship != NULL) {
         if (position.y < board->HEIGHT - 1) {
-            resetTile(&board->tiles[position.x + position.y * board->WIDTH]);
-            setTileShip(&board->tiles[position.x + (position.y + 1) * board->WIDTH], ship);
+            moveShip(board, ship, DOWN);
         }
     }
 }
@@ -146,8 +215,7 @@ void moveLeft(Board* board, Coordinate position) {
     Ship* ship = getShip(board, position);
     if (ship != NULL) {
         if (position.x > 0) {
-            resetTile(&board->tiles[position.x + position.y * board->WIDTH]);
-            setTileShip(&board->tiles[(position.x - 1) + position.y * board->WIDTH], ship);
+            moveShip(board, ship, LEFT);
         }
     }
 }
@@ -156,8 +224,7 @@ void moveRight(Board* board, Coordinate position) {
     Ship* ship = getShip(board, position);
     if (ship != NULL) {
         if (position.x < board->WIDTH - 1) {
-            resetTile(&board->tiles[position.x + position.y * board->WIDTH]);
-            setTileShip(&board->tiles[(position.x + 1) + position.y * board->WIDTH], ship);
+            moveShip(board, ship, RIGHT);
         }
     }
 }

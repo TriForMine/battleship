@@ -9,16 +9,21 @@ int main(void) {
     initBoard(&board, 10, 10);
 
     Ship ship;
-    initShip(&ship, 5, HORIZONTAL);
+    initShip(&ship, CARRIER, HORIZONTAL);
     placeShip(&board, &ship, (Coordinate) { 3, 4 });
 
     Ship ship2;
-    initShip(&ship2, 3, VERTICAL);
+    initShip(&ship2, CRUISER, VERTICAL);
     placeShip(&board, &ship2, (Coordinate) { 1, 4 });
 
-    fire(&board, (Coordinate) { 3, 4 });
     fire(&board, (Coordinate) { 1,4  });
     fire(&board, (Coordinate) { 0,0 });
+    fire(&board, (Coordinate) { 3, 4 });
+    printBoard(&board);
+
+    printf("\n\n");
+    moveRight(&board, (Coordinate) { 4, 4 });
+    moveDown(&board, (Coordinate) { 1, 4 });
 
     printBoard(&board);
 
