@@ -13,10 +13,12 @@ int main(void) {
     placeShip(&board, &ship, (Coordinate) { 3, 4 });
 
     Ship ship2;
-    initShip(&ship2, 2, VERTICAL);
+    initShip(&ship2, 3, VERTICAL);
     placeShip(&board, &ship2, (Coordinate) { 1, 4 });
 
     fire(&board, (Coordinate) { 3, 4 });
+    fire(&board, (Coordinate) { 1,4 });
+    fire(&board, (Coordinate) { 0,0 });
 
     printBoard(&board);
 

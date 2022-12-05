@@ -70,7 +70,9 @@ Ship* getShip(Board* board, Coordinate position) {
 
 /* Printing */
 void printBoard(Board* board) {
+
     Ship* ship;
+    Coordinate head;
     int x, y;
 
     printf("  ");
@@ -79,7 +81,7 @@ void printBoard(Board* board) {
     }
     printf("\n");
     for (y = 0; y < board->HEIGHT; ++y) {
-        printf("%d ", y);
+        printf("%c ", 65 + y);
         for (x = 0; x < board->WIDTH; ++x) {
             switch (board->tiles[x + y * board->WIDTH].state) {
                 case WATER:
@@ -87,29 +89,28 @@ void printBoard(Board* board) {
                     break;
                 case SHIP:
                     ship = getShip(board, (Coordinate){x, y});
+                    head=ship->head;
+                    /* affiche le hits du bateau*/
 
                     if (ship->orientation == HORIZONTAL) {
-                        if (ship->hits == ship->type) {
-                            printf("X ");
-                        } else if (ship->hits == 0) {
-                            printf("- ");
-                        } else {
-                            printf("0 ");
-                        }
-                    } else {
 
-                        if (ship->hits == ship->type) {
-                            printf("X ");
-                        } else if (ship->hits == 0) {
-                            printf("| ");
+                        if (ship->hits>>x-head.x&1) {
+                            printf("\033[31m☒\033[0m ");
                         } else {
-                            printf("O ");
+                            printf("\033[31m■\033[0m ");
+                        }
+                    }
+                    else {
+                        if (ship->hits>>y-head.y&1) {
+                            printf("\033[31m☒\033[0m ");
+                        } else {
+                            printf("\033[31m■\033[0m ");
                         }
                     }
 
                     break;
                 case MINE:
-                    printf("M ");
+                    printf("⚠ ");
                     break;
                 default:
                     printf("  ");
