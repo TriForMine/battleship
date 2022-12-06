@@ -3,6 +3,6 @@
 
 #include "types.h"
 
-Coordinate createCoordinate(int x, int y);
+Coordinate createCoordinate(unsigned int x, unsigned int y);
 
 #endif
