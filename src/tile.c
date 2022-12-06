@@ -34,8 +34,6 @@ void freeTile(Tile* tile) {
     if (tile->ship != NULL) {
         freeShip(tile->ship);
     }
-    if (tile->ship != NULL) {
-        free(tile->ship);
-    }
+
     tile->ship = NULL;
 }

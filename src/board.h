@@ -5,7 +5,7 @@
 #include "tile.h"
 
 /* Board */
-void initBoard(Board* board, int WIDTH, int HEIGHT);
+Board* createBoard(int WIDTH, int HEIGHT);
 void resetBoard(Board* board);
 void freeBoard(Board* board);
 

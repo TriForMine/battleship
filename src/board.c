@@ -5,7 +5,8 @@
 #include <stdlib.h>
 
 /* Board */
-void initBoard(Board* board, int WIDTH, int height) {
+Board* createBoard(int WIDTH, int height) {
+    Board* board = malloc(sizeof(Board));
     int x, y;
 
     board->WIDTH = WIDTH;
@@ -16,6 +17,8 @@ void initBoard(Board* board, int WIDTH, int height) {
             initTile(&board->tiles[x + y * board->WIDTH]);
         }
     }
+
+    return board;
 }
 
 void resetBoard(Board* board) {
@@ -36,7 +39,10 @@ void freeBoard(Board* board) {
             freeTile(&board->tiles[x + y * board->WIDTH]);
         }
     }
-    free(board->tiles);
+    if (board->tiles != NULL)
+        free(board->tiles);
+
+    free(board);
 }
 
 /* Ship Placements */
