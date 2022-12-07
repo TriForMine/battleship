@@ -15,7 +15,7 @@ void setGameTurnToPlayer2(GameTurn* turn);
 void setGameTurnToOpponent(GameTurn* turn);
 
 /* Actions */
-void fire (Game* game, Coordinate* coordinate);
-void move (Game* game, Coordinate* coordinate, Direction* direction);
+void fire(Game* game, Coordinate* coordinate);
+void move(Game* game, Coordinate* coordinate, Direction* direction);
 
 #endif

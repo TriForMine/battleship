@@ -6,36 +6,15 @@
 #ifndef BATTLESHIP_TYPES_H
 #define BATTLESHIP_TYPES_H
 
-typedef enum {
-    WATER = 0,
-    MINE = 1,
-    SHIP = 2
-} State;
+typedef enum { WATER = 0, MINE = 1, SHIP = 2 } State;
 
-typedef enum {
-    FRIGATE = 1,
-    DESTROYER = 2,
-    CRUISER = 3,
-    BATTLESHIP = 4,
-    CARRIER = 5
-} Ship_Type;
+typedef enum { FRIGATE = 1, DESTROYER = 2, CRUISER = 3, BATTLESHIP = 4, CARRIER = 5 } Ship_Type;
 
-typedef enum {
-    HORIZONTAL,
-    VERTICAL
-} Orientation;
+typedef enum { HORIZONTAL, VERTICAL } Orientation;
 
-typedef enum {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT
-} Direction;
+typedef enum { UP, DOWN, LEFT, RIGHT } Direction;
 
-typedef enum {
-    Player1,
-    Player2
-} GameTurn;
+typedef enum { Player1, Player2 } GameTurn;
 
 typedef struct {
     unsigned int x;
