@@ -30,7 +30,7 @@ freeShip(Board* board, Ship* ship) {
             free(ship->name);
         }
 
-        /* Set all other cases to NULL */
+        /* Set all other cases to NULL to free the ship multiple times */
         for (i = 0; i < ship->type; i++) {
             board
                 ->tiles[ship->head.x + i * (ship->orientation == HORIZONTAL)
