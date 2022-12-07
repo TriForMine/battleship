@@ -39,7 +39,7 @@ freeBoard(Board* board) {
 
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
-            freeTile(&board->tiles[x + y * board->WIDTH]);
+            freeTile(board, &board->tiles[x + y * board->WIDTH]);
         }
     }
     if (board->tiles != NULL) {

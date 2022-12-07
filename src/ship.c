@@ -22,10 +22,22 @@ createShipWithName(Ship_Type type, Orientation orientation, char* name) {
 }
 
 void
-freeShip(Ship* ship) {
-    if (ship->name != NULL) {
-        free(ship->name);
-    }
+freeShip(Board* board, Ship* ship) {
+    int i;
 
-    free(ship);
+    if (ship != NULL) {
+        if (ship->name != NULL) {
+            free(ship->name);
+        }
+
+        /* Set all other cases to NULL */
+        for (i = 0; i < ship->type; i++) {
+            board
+                ->tiles[ship->head.x + i * (ship->orientation == HORIZONTAL)
+                        + (ship->head.y + i * (ship->orientation == VERTICAL)) * board->HEIGHT]
+                .ship = NULL;
+        }
+
+        free(ship);
+    }
 }

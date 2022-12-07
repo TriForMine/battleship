@@ -35,9 +35,9 @@ resetTile(Tile* tile) {
 }
 
 void
-freeTile(Tile* tile) {
+freeTile(Board* board, Tile* tile) {
     if (tile->ship != NULL) {
-        freeShip(tile->ship);
+        freeShip(board, tile->ship);
     }
 
     tile->ship = NULL;

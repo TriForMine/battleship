@@ -6,6 +6,6 @@
 Ship* createShip(Ship_Type type, Orientation orientation);
 Ship* createShipWithName(Ship_Type type, Orientation orientation, char* name);
 void setShipState(Ship* ship, int index);
-void freeShip(Ship* ship);
+void freeShip(Board* board, Ship* ship);
 
 #endif
