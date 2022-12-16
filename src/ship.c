@@ -1,10 +1,9 @@
 #include "ship.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include "stdprof.h"
 
 Ship*
 createShip(Ship_Type type, Orientation orientation) {
-    Ship* ship = malloc(sizeof(Ship));
+    Ship* ship = malloc_prof(sizeof(Ship));
 
     ship->type = type;
     ship->orientation = orientation;
@@ -27,7 +26,8 @@ freeShip(Board* board, Ship* ship) {
 
     if (ship != NULL) {
         if (ship->name != NULL) {
-            free(ship->name);
+            free_prof(ship->name);
+            ship->name = NULL;
         }
 
         /* Set all other cases to NULL to free the ship multiple times */
@@ -38,6 +38,6 @@ freeShip(Board* board, Ship* ship) {
                 .ship = NULL;
         }
 
-        free(ship);
+        free_prof(ship);
     }
 }

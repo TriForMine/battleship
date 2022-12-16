@@ -30,6 +30,6 @@ void moveLeft(Board* board, Coordinate position);
 void moveRight(Board* board, Coordinate position);
 
 /* Fire */
-void fire(Board* board, Coordinate position);
+void fireAt(Board* board, Coordinate position);
 
 #endif

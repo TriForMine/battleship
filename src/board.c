@@ -1,18 +1,18 @@
 #include "board.h"
 #include "const.h"
 #include "tile.h"
+#include "stdprof.h"
 #include <stdio.h>
-#include <stdlib.h>
 
 /* Board */
 Board*
 createBoard(int WIDTH, int height) {
-    Board* board = malloc(sizeof(Board));
+    Board* board = malloc_prof(sizeof(Board));
     int x, y;
 
     board->WIDTH = WIDTH;
     board->HEIGHT = height;
-    board->tiles = malloc(sizeof(Tile) * board->WIDTH * board->HEIGHT);
+    board->tiles = malloc_prof(sizeof(Tile) * board->WIDTH * board->HEIGHT);
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
             initTile(&board->tiles[x + y * board->WIDTH]);
@@ -43,10 +43,10 @@ freeBoard(Board* board) {
         }
     }
     if (board->tiles != NULL) {
-        free(board->tiles);
+        free_prof(board->tiles);
     }
 
-    free(board);
+    free_prof(board);
 }
 
 Tile
@@ -282,7 +282,7 @@ moveRight(Board* board, Coordinate position) {
 
 /* Fire */
 void
-fire(Board* board, Coordinate position) {
+fireAt(Board* board, Coordinate position) {
     Coordinate head;
     Ship* ship = getShip(board, position);
 
