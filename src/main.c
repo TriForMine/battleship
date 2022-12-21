@@ -58,11 +58,7 @@ int main(int argc, char *argv[]) {
             char action[BUFFER_SIZE];
             char target[BUFFER_SIZE];
 
-            if (strcmp(token, "J1") == 0) {
-                player = 1;
-            } else {
-                player = 2;
-            }
+            player = token[1] - '0';
 
             token = strtok(NULL, " ");
             strcpy(action, token);
@@ -90,6 +86,11 @@ int main(int argc, char *argv[]) {
                 int f = sscanf(token, "\"%[^\"]\"", ship_name);
 
                 if (f != 0) {
+                    /* verifier que le nom de bateau n'existe pas*/
+                    if (shipExists(board, ship_name)) {
+                        printf("Error: Ship with name %s already exists\n", ship_name);
+                        continue;
+                    }
                     token += strlen(ship_name) + sizeof(char) * 3;
                 } else {
                     if (ship_name != NULL) {
@@ -110,7 +111,8 @@ int main(int argc, char *argv[]) {
                 ship_orientation = (start_x == end_x) ? 1 : 0;
                 ship_type = (ship_orientation == 1) ? end_y - start_y + 1 : end_x - start_x + 1;
 
-                if (f != 0) {
+                if ((f != 0) && !(shipExists(board, ship_name))) {
+
                     ship = createShipWithName(ship_type, ship_orientation, ship_name);
                 } else {
                     ship = createShip(ship_type, ship_orientation);
