@@ -6,6 +6,9 @@
 #ifndef BATTLESHIP_TYPES_H
 #define BATTLESHIP_TYPES_H
 
+#include <stdlib.h>
+#include "hmap.h"
+
 typedef enum { WATER = 0, MINE = 1, SHIP = 2 } State;
 
 typedef enum { FRIGATE = 1, DESTROYER = 2, CRUISER = 3, BATTLESHIP = 4, CARRIER = 5 } Ship_Type;
@@ -40,8 +43,9 @@ typedef struct {
 /* Board */
 typedef struct {
     Tile* tiles;
-    int WIDTH;
-    int HEIGHT;
+    unsigned int WIDTH;
+    unsigned int HEIGHT;
+    Dictionary* ships_by_name;
 } Board;
 
 /* Game */

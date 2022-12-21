@@ -3,10 +3,10 @@ PROJDIR := $(realpath $(CURDIR))
 SOURCEDIR = $(PROJDIR)/src
 BUILDDIR := $(PROJDIR)/build
 
-FLAGS  = -Wall -ansi -pedantic
-FLAGS  += -funroll-loops -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -fvisibility=hidden
-FLAGS  += -Werror -Os -g
-FLAGS  += -Wextra -Wno-unused-parameter -Wno-unused-variable -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wstrict-prototypes -Wwrite-strings -Wunreachable-code
+CFLAGS  = -Wall -ansi -pedantic
+CFLAGS  += -funroll-loops -fsanitize=address,undefined -fno-omit-frame-pointer -fno-optimize-sibling-calls -fvisibility=hidden
+CFLAGS  += -Werror -Os -g
+CFLAGS  += -Wextra -Wno-unused-parameter -Wno-unused-variable -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wstrict-prototypes -Wwrite-strings -Wunreachable-code
 
 SOURCE	= $(wildcard $(SOURCEDIR)/*.c)
 HEADER	= $(wildcard $(SOURCEDIR)/*.h)
@@ -39,7 +39,7 @@ directories:
 
 $(TARGET): $(OBJS)
 	@echo Linking $@
-	$(CC) ${FLAGS} -g $(OBJS) -o $(TARGET) $(LFLAGS)
+	$(CC) $(CFLAGS) -g $(OBJS) -o $(TARGET) $(LFLAGS)
 
 clean:
 	@${RM} -f $(OBJS) $(OUT) *~

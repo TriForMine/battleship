@@ -3,39 +3,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void
-initTile(Tile* tile) {
+void initTile(Tile* tile) {
     tile->state = WATER;
     tile->ship = NULL;
 }
 
-void
-setTileState(Tile* tile, State state) {
-    tile->state = state;
-}
+void setTileState(Tile* tile, State state) { tile->state = state; }
 
-void
-setTileShip(Tile* tile, Ship* ship) {
+void setTileShip(Tile* tile, Ship* ship) {
     tile->state = SHIP;
     tile->ship = ship;
 }
 
-void
-removeTileShip(Tile* tile) {
+void removeTileShip(Tile* tile) {
     tile->state = WATER;
     tile->ship = NULL;
 }
 
-void
-resetTile(Tile* tile) {
+void resetTile(Tile* tile) {
     if (tile->state == SHIP) {
         tile->ship = NULL;
     }
     tile->state = WATER;
 }
 
-void
-freeTile(Board* board, Tile* tile) {
+void freeTile(Board* board, Tile* tile) {
     if (tile->ship != NULL) {
         freeShip(board, tile->ship);
     }

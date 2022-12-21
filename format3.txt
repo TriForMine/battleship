@@ -1,0 +1,14 @@
+Projet 10x10 # Définit la taille du plateau
+J1 P 1:1-3
+J2 P 1-3:9
+J1 P 4-5:3
+J2 P 8:6-7
+Jouer
+Afficher
+J1 T 8:8 # Raté  : pose une mine
+J2 H 1:9 # le bateau se déplace vers le haut
+J1 D 4:3 # Le bateau se déplace vers la droite
+J2 B 8:6 # Le bateau se déplace vers le bas et touche un mine : touché
+J1 T 8:7 # Coulé
+J2 T 4:3 # Raté
+Afficher
