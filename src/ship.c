@@ -20,6 +20,23 @@ createShipWithName(Ship_Type type, Orientation orientation, char* name) {
     return ship;
 }
 
+bool
+shipExists(Board* board, char* name) {
+    int i, j;
+
+    for (i = 0; i < board->WIDTH; i++) {
+        for (j = 0; j < board->HEIGHT; j++) {
+            if (board->tiles[i + j * board->HEIGHT].ship != NULL) {
+                if (strcmp(board->tiles[i + j * board->HEIGHT].ship->name, name) == 0) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
 void
 freeShip(Board* board, Ship* ship) {
     int i;
@@ -40,23 +57,4 @@ freeShip(Board* board, Ship* ship) {
 
         free_prof(ship);
     }
-}
-
-bool
-shipExists(Board* board, char* name) {
-    int i, j;
-    bool found = false;
-
-    for (i = 0; i < board->WIDTH; i++) {
-        for (j = 0; j < board->HEIGHT; j++) {
-            if (board->tiles[i + j * board->HEIGHT].ship != NULL) {
-                if (strcmp(board->tiles[i + j * board->HEIGHT].ship->name, name) == 0) {
-                    found = true;
-                    break;
-                }
-            }
-        }
-    }
-
-    return found;
 }
