@@ -42,21 +42,29 @@ freeShip(Board* board, Ship* ship) {
     }
 }
 
-bool
-shipExists(Board* board, char* name) {
-    int i, j;
-    bool found = false;
+Ship*
+getShipWithCoordinate(Board* board, Coordinate coordinate) {
+    return board->tiles[coordinate.x + coordinate.y * board->WIDTH].ship;
+}
 
+Ship*
+getShipWithName(Board* board, char* name) {
+    int i, j;
+    Ship* ship = NULL;
     for (i = 0; i < board->WIDTH; i++) {
         for (j = 0; j < board->HEIGHT; j++) {
             if (board->tiles[i + j * board->HEIGHT].ship != NULL) {
                 if (strcmp(board->tiles[i + j * board->HEIGHT].ship->name, name) == 0) {
-                    found = true;
-                    break;
+                    ship = board->tiles[i + j * board->HEIGHT].ship;
+                    return ship;
                 }
             }
         }
     }
+    return ship;
+}
 
-    return found;
+bool
+shipExists(Board* board, char* name) {
+    return getShipWithName(board, name) != NULL;
 }

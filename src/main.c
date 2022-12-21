@@ -68,9 +68,14 @@ int main(int argc, char *argv[]) {
 
                 // This action has a target
                 token = strtok(NULL, " ");
-                sscanf(token,"%d:%d", &pos_x, &pos_y);
+                sscanf(token, "%d:%d", &pos_x, &pos_y);
 
                 fireAt(board, createCoordinate(pos_x, pos_y));
+            } else if (strcmp(action, "G") == 0) {
+                int pos_x, pos_y;
+                token = strtok(NULL, " ");
+                sscanf(token, "%d:%d", &pos_x, &pos_y);
+                moveShip(board, getShipWithCoordinate(board, createCoordinate(pos_x, pos_y)), LEFT);
             } else if (strcmp(action, "P") == 0) {
                 int start_x, start_y, end_x, end_y, ship_orientation, ship_type;
                 char* ship_name = malloc_prof(sizeof(char) * MAX_LENGTH_NAME);
@@ -86,7 +91,7 @@ int main(int argc, char *argv[]) {
                 int f = sscanf(token, "\"%[^\"]\"", ship_name);
 
                 if (f != 0) {
-                    /* verifier que le nom de bateau n'existe pas*/
+
                     if (shipExists(board, ship_name)) {
                         printf("Error: Ship with name %s already exists\n", ship_name);
                         continue;
