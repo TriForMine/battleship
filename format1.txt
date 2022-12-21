@@ -1,0 +1,10 @@
+Projet 6x6 # Définit la taille du plateau
+J1 P 2:4   # ici les indices vont de 0 à 5.
+J2 P 1:2
+J1 P 5:3
+J2 P 0:0
+Afficher # Affiche le plateau
+Jouer
+J1 T 1:3 # Raté
+J2 T 2:4 # Touché
+Afficher

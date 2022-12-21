@@ -1,0 +1,25 @@
+Projet 6x6 # Définit la taille du plateau
+J1 P 2-5:0
+J2 P 0-3:4
+J1 P 0:0-1
+J2 P 5:3-4
+J1 P 3:2
+J2 P 2:5
+Afficher
+Jouer
+J1 T 5:3 # Touché
+J2 T 4:1
+J1 T 5:4 # Coulé
+Afficher
+J2 T 5:0
+J1 T 2:5 # Coulé
+J2 T 0:0 # Touché
+J1 T 0:4 # Touché
+J2 T 1:0
+J1 T 1:4 # Touché
+J2 T 0:1 # Coulé
+Afficher
+J1 T 2:4 # Touché
+J2 T 4:0 # Touché
+J1 T 3:4 # Gagné
+Afficher
