@@ -51,12 +51,12 @@ cd battleship
 ```
 3. Compile the source code using CMake and Ninja:
 ```sh
-cmake -GNinja .
-ninja
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
+cmake --build build
 ```
 4. Run the game:
 ```sh
-./battleship
+./build/battleship
 ```
 
 ## Gameplay
