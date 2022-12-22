@@ -2,7 +2,7 @@
 #include "board.h"
 
 /* Game */
-Game* createGame(bool single_board, unsigned int WIDTH, unsigned int HEIGHT) {
+Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int WIDTH, unsigned int HEIGHT) {
     Game* game = malloc_prof(sizeof(Game));
     game->board1 = createBoard(WIDTH, HEIGHT);
     game->board2 = createBoard(WIDTH, HEIGHT);
@@ -10,6 +10,13 @@ Game* createGame(bool single_board, unsigned int WIDTH, unsigned int HEIGHT) {
     game->turn = Player1;
     game->remaining_ships[0] = 0;
     game->remaining_ships[1] = 0;
+
+    /* Initialize the random seed. */
+    game->seed = generate_random_seed();
+    /* Initialize the random number generator. */
+    srand(game->seed);
+
+    game->ai_mode = ai_mode;
     return game;
 }
 

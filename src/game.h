@@ -4,12 +4,13 @@
 #include <stdbool.h>
 #include "board.h"
 #include "error.h"
+#include "random.h"
 #include "ship.h"
 #include "types.h"
 #include "stdprof.h"
 
 /* Game */
-Game* createGame(bool single_board, unsigned int WIDTH, unsigned int HEIGHT);
+Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int WIDTH, unsigned int HEIGHT);
 void printGame(Game* game);
 void resetGame(Game* game);
 void freeGame(Game* game);

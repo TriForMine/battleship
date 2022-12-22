@@ -2,6 +2,7 @@
 #define BATTLESHIP_MAIN_H
 
 #include <stdio.h>
+#include <stdbool.h>
 #include "game.h"
 #include "board.h"
 #include "stdprof.h"
