@@ -3,10 +3,10 @@
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "game.h"
-#include "board.h"
-#include "stdprof.h"
-#include "parser.h"
+#include "game/game.h"
+#include "game/board.h"
+#include "utils/stdprof.h"
+#include "core/parser.h"
 
 Game game;
 

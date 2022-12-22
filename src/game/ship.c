@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "ship.h"
-#include "stdprof.h"
-#include "helpers.h"
+#include "../utils/stdprof.h"
+#include "../utils/helpers.h"
 #include "board.h"
 
 Ship* createShip(Ship_Type type, Orientation orientation, char owner) {

@@ -5,9 +5,14 @@ BUILDDIR := $(PROJDIR)/build
 
 CFLAGS  = -Wall -ansi -pedantic
 
-SOURCE	= $(wildcard $(SOURCEDIR)/*.c)
-HEADER	= $(wildcard $(SOURCEDIR)/*.h)
-OBJS	= $(SOURCE:.c=.o)
+# Include all source files in subdirectories of SOURCEDIR
+SOURCEDIRS = $(shell find $(SOURCEDIR) -type d)
+SOURCES = $(foreach dir,$(SOURCEDIRS),$(wildcard $(dir)/*.c))
+HEADERS =  $(foreach dir,$(SOURCEDIRS),$(wildcard $(dir)/*.h))
+
+# Generate a list of object files from the source files, with the directory name as a prefix
+OBJS = $(patsubst $(SOURCEDIR)/%.c,$(BUILDDIR)/%.o,$(SOURCES))
+
 TARGET	= ${BUILDDIR}/battleship
 CC	 = gcc
 LFLAGS	 =
@@ -32,7 +37,7 @@ endif
 all: directories $(TARGET)
 
 directories:
-	 @$(MKDIR) ${BUILDDIR} $(ERRIGNORE)
+	$(foreach obj,$(OBJS),$(MKDIR) $(dir $(obj)))
 
 # Add -fsanitize=address,undefined flag if release target is not used
 ifneq ($(MAKECMDGOALS),release)
@@ -49,7 +54,10 @@ $(TARGET): $(OBJS)
 	@echo Linking $@
 	$(CC) $(CFLAGS) -g $(OBJS) -o $(TARGET) $(LFLAGS)
 
+$(OBJS): $(BUILDDIR)/%.o : $(SOURCEDIR)/%.c $(HEADERS)
+	$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	@${RM} -f $(OBJS) $(OUT) *~
+	@${RM} -f $(OBJS) $(TARGET) *~
 	@${RMDIR} $(BUILDDIR)
 	@echo Cleaning done!

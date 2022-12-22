@@ -6,11 +6,11 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <limits.h>
-#include "game.h"
-#include "board.h"
-#include "error.h"
-#include "stdprof.h"
-#include "ship.h"
+#include "../game/game.h"
+#include "../game/board.h"
+#include "../utils/error.h"
+#include "../utils/stdprof.h"
+#include "../game/ship.h"
 
 void parseSTDIN(void);
 void parseFile(char* filename);

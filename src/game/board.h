@@ -4,13 +4,13 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
-#include "const.h"
-#include "error.h"
+#include "../utils/const.h"
+#include "../utils/error.h"
 #include "tile.h"
-#include "stdprof.h"
-#include "helpers.h"
-#include "hmap.h"
-#include "types.h"
+#include "../utils/stdprof.h"
+#include "../utils/helpers.h"
+#include "../utils/hmap.h"
+#include "../utils/types.h"
 
 /* Board */
 Board* createBoard(unsigned int WIDTH, unsigned int HEIGHT);

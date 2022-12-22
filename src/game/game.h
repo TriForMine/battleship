@@ -3,11 +3,11 @@
 
 #include <stdbool.h>
 #include "board.h"
-#include "error.h"
-#include "random.h"
+#include "../utils/error.h"
+#include "../utils/random.h"
 #include "ship.h"
-#include "types.h"
-#include "stdprof.h"
+#include "../utils/types.h"
+#include "../utils/stdprof.h"
 
 /* Game */
 Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int WIDTH, unsigned int HEIGHT);

@@ -5,4 +5,4 @@ set(CMAKE_C_STANDARD 90)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static")
 
 add_compile_options(-ansi)
-add_executable(battleship src/main.c src/board.h src/error.h src/tile.h src/ship.h src/types.h src/ship.c src/ship.c src/game.h src/game.h src/error.c src/tile.c src/board.c src/board.c src/const.h src/main.h src/helpers.h src/helpers.c src/stdprof.c src/hmap.c src/hmap.h src/parser.c src/parser.h src/game.c src/random.c src/random.h)
+add_executable(battleship src/main.c src/game/board.h src/utils/error.h src/game/tile.h src/game/ship.h src/utils/types.h src/game/ship.c src/game/ship.c src/game/game.h src/game/game.h src/utils/error.c src/game/tile.c src/game/board.c src/game/board.c src/utils/const.h src/main.h src/utils/helpers.h src/utils/helpers.c src/utils/stdprof.c src/utils/hmap.c src/utils/hmap.h src/core/parser.c src/core/parser.h src/game/game.c src/utils/random.c src/utils/random.h)

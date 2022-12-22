@@ -1,7 +1,7 @@
 #ifndef BATTLESHIP_TILE_H
 #define BATTLESHIP_TILE_H
 
-#include "types.h"
+#include "../utils/types.h"
 
 void initTile(Tile* tile);
 void setTileState(Tile* tile, State state);
