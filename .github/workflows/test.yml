@@ -26,6 +26,14 @@ jobs:
         run: |
           # Build the project
           make
+          
+          # Test the project
+          build/battleship format0.txt
+          build/battleship format1.txt
+          build/battleship format2.txt
+          build/battleship format3.txt
+          build/battleship format4.txt
+          build/battleship format5.txt
         
           # Install lcov
           sudo apt-get install lcov
