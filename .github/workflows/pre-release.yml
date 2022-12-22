@@ -10,6 +10,7 @@ on:
 jobs:
   pre-release:
     name: "Pre Release"
+    continue-on-error: true
     strategy:
       fail-fast: false
       matrix:
@@ -36,16 +37,14 @@ jobs:
       - name: "Build project"
         if: matrix.os == 'windows-latest'
         run: cmake --build build
-
-      - uses: "marvinpinto/action-automatic-releases@latest"
+        
+      - name: Release | Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          title: "Development Build"
-          files: |
-            if [ "$RUNNER_OS" == "Windows" ]; then
+          name: ${{ matrix.name }}
+          path: if [ "$RUNNER_OS" == "Windows" ]; then
               build\Release\battleship.exe
             else
               build/battleship
             fi
+            
