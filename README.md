@@ -56,7 +56,7 @@ ninja
 ```
 4. Run the game:
 ```sh
-./build/battleship
+./battleship
 ```
 
 ## Gameplay
