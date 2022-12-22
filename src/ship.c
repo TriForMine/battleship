@@ -4,23 +4,26 @@
 #include "helpers.h"
 #include "board.h"
 
-Ship* createShip(Ship_Type type, Orientation orientation) {
+Ship* createShip(Ship_Type type, Orientation orientation, char owner) {
     Ship* ship = malloc_prof(sizeof(Ship));
 
     ship->type = type;
     ship->orientation = orientation;
     ship->name = NULL;
     ship->hits = 0;
+    ship->owner = owner;
 
     return ship;
 }
 
-Ship* createShipWithName(Board* board, Ship_Type type, Orientation orientation, char* name) {
-    Ship* ship = createShip(type, orientation);
+Ship* createShipWithName(Board* board, Ship_Type type, Orientation orientation, char owner, char* name) {
+    Ship* ship = createShip(type, orientation, owner);
     ship->name = name;
     dictionarySet(board->ships_by_name, name, ship);
     return ship;
 }
+
+bool isShipSunk(Ship* ship) { return ship->hits == (1 << (int)ship->type) - 1; }
 
 void freeShip(Board* board, Ship* ship) {
     unsigned int i;

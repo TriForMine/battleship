@@ -8,6 +8,7 @@ J1 T 8:8 # Raté  : pose une mine
 J2 G "Le C" # le bateau se déplace vers la gauche
 J1 D "L’Elixir" # Le bateau se déplace vers la droite
 J2 B "Le Rust"  # Le bateau se déplace vers le bas et touche un mine : touché
-J1 T 8:7 # Coulé
-J2 T 4:3 # Raté
+J1 T 2:7 # Coulé
+# La partie est terminée, le joueur 1 a gagné
+#J2 T 4:3 # Raté
 Afficher

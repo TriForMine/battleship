@@ -5,8 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <limits.h>
 #include "game.h"
 #include "board.h"
+#include "error.h"
 #include "stdprof.h"
 #include "ship.h"
 

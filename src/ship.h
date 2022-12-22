@@ -6,9 +6,10 @@
 #include <stdbool.h>
 #include <string.h>
 
-Ship* createShip(Ship_Type type, Orientation orientation);
-Ship* createShipWithName(Board* board, Ship_Type type, Orientation orientation, char* name);
+Ship* createShip(Ship_Type type, Orientation orientation, char owner);
+Ship* createShipWithName(Board* board, Ship_Type type, Orientation orientation, char owner, char* name);
 void setShipState(Ship* ship, int index);
+bool isShipSunk(Ship* ship);
 void freeShip(Board* board, Ship* ship);
 Ship* getShipWithCoordinate(Board* board, Coordinate coordinate);
 Ship* getShipWithName(Board* board, char* name);

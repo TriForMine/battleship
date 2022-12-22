@@ -7,6 +7,7 @@
 #define BATTLESHIP_TYPES_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 #include "hmap.h"
 
 typedef enum { WATER = 0, MINE = 1, SHIP = 2 } State;
@@ -32,6 +33,7 @@ typedef struct {
     /* Bitfields of hits */
     int hits;
     Coordinate head;
+    char owner;
 } Ship;
 
 /* Tile */
@@ -53,6 +55,8 @@ typedef struct {
     Board* board1;
     Board* board2;
     GameTurn turn;
+    bool single_board;
+    unsigned int remaining_ships[2];
 } Game;
 
 #endif

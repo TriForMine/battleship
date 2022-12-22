@@ -1,7 +1,7 @@
 #include "board.h"
 
 /* Board */
-Board* createBoard(int width, int height) {
+Board* createBoard(unsigned int width, unsigned int height) {
     Board* board = malloc_prof(sizeof(Board));
     unsigned int x, y;
 
@@ -81,21 +81,48 @@ Tile* getTile(Board* board, Coordinate coordinate) { return &board->tiles[coordi
 
 State getTileState(Board* board, Coordinate coordinate) { return getTile(board, coordinate)->state; }
 
+/* Checks */
+bool isCoordinateValid(Board* board, Coordinate coordinate) {
+    return coordinate.x < board->WIDTH && coordinate.y < board->HEIGHT;
+}
+
 /* Ship Placements */
 void placeShip(Board* board, Ship* ship, Coordinate position) {
     unsigned int i;
     Coordinate current;
 
+    if (isCoordinateValid(board, position) == false) {
+        RAISE_ERROR(ERR_INVALID_SHIP_POSITION);
+    }
+
     if (ship->orientation == HORIZONTAL) {
         for (i = 0; i < ship->type; ++i) {
             current.x = position.x + i;
             current.y = position.y;
+
+            if (isCoordinateValid(board, current) == false) {
+                RAISE_ERROR(ERR_INVALID_SHIP_POSITION);
+            }
+
+            if (getTileState(board, current) == SHIP) {
+                RAISE_ERROR(ERR_SHIP_OVERLAP);
+            }
+
             setTileShip(getTile(board, createCoordinate(current.x, current.y)), ship);
         }
     } else {
         for (i = 0; i < ship->type; ++i) {
             current.x = position.x;
             current.y = position.y + i;
+
+            if (isCoordinateValid(board, current) == false) {
+                RAISE_ERROR(ERR_INVALID_SHIP_POSITION);
+            }
+
+            if (getTileState(board, current) == SHIP) {
+                RAISE_ERROR(ERR_SHIP_OVERLAP);
+            }
+
             setTileShip(getTile(board, createCoordinate(current.x, current.y)), ship);
         }
     }
@@ -118,8 +145,6 @@ void printBoard(Board* board) {
     Coordinate head;
     unsigned int x, y;
 
-    setlocale(LC_ALL, "");
-
     printf("  ");
     for (x = 0; x < board->WIDTH; ++x) {
         printf("%d ", x);
@@ -137,7 +162,6 @@ void printBoard(Board* board) {
                     head = ship->head;
 
                     if (ship->orientation == HORIZONTAL) {
-
                         if (ship->hits >> (x - head.x) & 1) {
                             printf(ANSI_COLOR_RED "□" ANSI_COLOR_RESET " ");
                         } else {
@@ -261,7 +285,17 @@ void moveRight(Board* board, Coordinate position) {
 /* Fire */
 void fireAt(Board* board, Coordinate position) {
     Coordinate head;
-    Ship* ship = getShip(board, position);
+    Ship* ship;
+
+    if (isCoordinateValid(board, position) == false) {
+        RAISE_ERROR(ERR_INVALID_COORDINATES);
+    }
+
+    if (getTileState(board, position) == MINE) {
+        RAISE_ERROR(ERR_COORDINATE_ALREADY_HIT);
+    }
+
+    ship = getShip(board, position);
 
     if (ship != NULL) {
         head = ship->head;
