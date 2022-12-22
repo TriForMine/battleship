@@ -12,8 +12,8 @@ int main(int argc, char* argv[]) {
             help = true;
         } else if (strcmp(argv[i], "-i") == 0 || strcmp(argv[i], "--interactive") == 0) {
             interactive = true;
-        } else {
-            filename = argv[i];
+        } else if ((strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) && i + 1 < argc) {
+            filename = argv[i + 1];
         }
     }
 

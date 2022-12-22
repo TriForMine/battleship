@@ -53,7 +53,7 @@ jobs:
           name: ${{ matrix.name }}.sha256
           path: ${{ matrix.name }}.sha256
 
-      - name: "Release | Upload artifacts"
+      - name: "Release | Upload artifacts (binary)"
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}

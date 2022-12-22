@@ -26,13 +26,13 @@ jobs:
         with:
           fetch-depth: 1
       - name: Run Makefile
-        run: |
+        run: >-
           make release
           
           # Test the project
-          build/battleship format0.txt
-          build/battleship format1.txt
-          build/battleship format2.txt
-          build/battleship format3.txt
-          build/battleship format4.txt
-          build/battleship format5.txt
+          for i in $(find test/ -name "*.txt") 
+          do
+            echo "Testing $i"
+            build/battleship -f $i >> /dev/null
+            echo "Test $i passed\n"
+          done
