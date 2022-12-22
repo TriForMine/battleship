@@ -38,13 +38,16 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: cmake --build build
         
-      - name: Release | Upload artifacts
+      - name: "Release | Upload artifacts (Windows)"
+        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}
-          path: if [ "$RUNNER_OS" == "Windows" ]; then
-              build\Release\battleship.exe
-            else
-              build/battleship
-            fi
-            
+          path: build\Release\battleship.exe
+          
+      - name: "Release | Upload artifacts (Windows)"
+        if: matrix.os != 'windows-latest'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.name }}
+          path: build/battleship
