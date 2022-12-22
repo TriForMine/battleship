@@ -1,7 +1,15 @@
-[![pre-release](https://github.com/TriForMine/battleship/actions/workflows/pre-release.yml/badge.svg)](https://github.com/TriForMine/battleship/actions/workflows/pre-release.yml) [![DeepSource](https://deepsource.io/gh/TriForMine/battleship.svg/?label=active+issues&show_trend=true&token=46Xb9KY7rG195b7ilvE_jl6i)](https://deepsource.io/gh/TriForMine/battleship/?ref=repository-badge)
 # Battleship Game in C
 
+<img align="right" src="https://i.imgur.com/5ENqoMn.png" height="150px">
+
 Welcome to the Battleship Game in C! This is a variation of the classic battleship game where you can move your ships and when you miss a ship, a mine is placed on the board.
+
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/TriForMine/battleship)
+![GitHub](https://img.shields.io/github/license/TriForMine/battleship)
+![GitHub last commit](https://img.shields.io/github/last-commit/TriForMine/battleship) <br/>
+[![test](https://github.com/TriForMine/battleship/actions/workflows/test.yml/badge.svg)](https://github.com/TriForMine/battleship/actions/workflows/test.yml)
+[![pre-release](https://github.com/TriForMine/battleship/actions/workflows/pre-release.yml/badge.svg)](https://github.com/TriForMine/battleship/actions/workflows/pre-release.yml)
+[![DeepSource](https://deepsource.io/gh/TriForMine/battleship.svg/?label=active+issues&show_trend=true&token=46Xb9KY7rG195b7ilvE_jl6i)](https://deepsource.io/gh/TriForMine/battleship/?ref=repository-badge)
 
 ## Installation
 
