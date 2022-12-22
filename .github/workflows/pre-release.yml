@@ -47,7 +47,6 @@ jobs:
           mv build\Release\battleship.exe ${{ matrix.name }}
         
       - name: "Release | Upload artifacts"
-        if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v3
         with:
           name: battleship-${{ matrix.os }}
