@@ -33,6 +33,6 @@ jobs:
           for i in $(find test/ -name "*.txt") 
           do
             echo "Testing $i";
-            build/battleship -f $i >0 /dev/null;
-            echo "Test $i passed\n";
+            build/battleship -f $i;
+            echo "Test $i passed\n"
           done
