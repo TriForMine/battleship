@@ -1,3 +1,4 @@
+[![pre-release](https://github.com/TriForMine/battleship/actions/workflows/pre-release.yml/badge.svg)](https://github.com/TriForMine/battleship/actions/workflows/pre-release.yml) [![DeepSource](https://deepsource.io/gh/TriForMine/battleship.svg/?label=active+issues&show_trend=true&token=46Xb9KY7rG195b7ilvE_jl6i)](https://deepsource.io/gh/TriForMine/battleship/?ref=repository-badge)
 # Battleship Game in C
 
 Welcome to the Battleship Game in C! This is a variation of the classic battleship game where you can move your ships and when you miss a ship, a mine is placed on the board.
