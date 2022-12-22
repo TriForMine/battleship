@@ -24,10 +24,14 @@ jobs:
         env:
           DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
         run: |
+          # Install lcov
+          apt-get install lcov
+          
+          # Execute lcov
+          lcov --directory src --capture --output-file coverage.info
+        
           # Install the CLI
           curl https://deepsource.io/cli | sh
-          
-          lcov --directory src --capture --output-file coverage.info
 
           # Send the report to DeepSource
           ./bin/deepsource report --analyzer test-coverage --key cxx --value-file ./coverage.info
