@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include: 
+        include:
           - os: ubuntu-latest
             name: battleship-linux
           - os: windows-latest
@@ -32,22 +32,22 @@ jobs:
 
       - name: "Run Makefile"
         if: matrix.os != 'windows-latest'
-        run: | 
-          make
+        run: |
+          make release
           mv build/battleship ${{ matrix.name }}
 
       - name: "Build project"
         if: matrix.os == 'windows-latest'
-        run: | 
+        run: |
           cmake --build build
           mv build\battleship.exe ${{ matrix.name }}
-        
+
       - name: "Release | Upload artifacts"
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}
           path: ${{ matrix.name }}
-          
+
   upload_artifacts:
     name: Add Build Artifacts to Release
     needs: pre-release
@@ -56,12 +56,10 @@ jobs:
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
 
-      - name: "Release"
-        uses: "softprops/action-gh-release@v1"
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: "latest"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
           prerelease: true
-          name: "Development Build"
-          generate_release_notes: true
+          title: "Development Build"
           files: battleship-*/battleship*
-          append_body: false
