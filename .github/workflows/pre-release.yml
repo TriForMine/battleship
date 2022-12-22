@@ -56,12 +56,10 @@ jobs:
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
 
-      - name: "Release"
-        uses: "softprops/action-gh-release@v1"
+      - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          tag_name: "latest"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+          automatic_release_tag: "latest"
           prerelease: true
-          name: "Development Build"
-          generate_release_notes: true
+          title: "Development Build"
           files: battleship-*/battleship*
-          append_body: false
