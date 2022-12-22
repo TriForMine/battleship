@@ -32,7 +32,7 @@ jobs:
           # Test the project
           for i in $(find test/ -name "*.txt") 
           do
-            echo "Testing $i"
-            build/battleship -f $i >> /dev/null
-            echo "Test $i passed\n"
+            echo "Testing $i";
+            build/battleship -f $i >0 /dev/null;
+            echo "Test $i passed\n";
           done
