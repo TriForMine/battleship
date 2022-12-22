@@ -4,7 +4,7 @@
 /* Initialize a dictionary with a given capacity */
 Dictionary* dictionary_create(size_t capacity) {
     Dictionary* dictionary = malloc_prof(sizeof(Dictionary));
-    dictionary->entries = calloc(capacity, sizeof(DictionaryEntry*));
+    dictionary->entries = calloc_prof(capacity, sizeof(DictionaryEntry*));
     dictionary->size = 0;
     dictionary->capacity = capacity;
     return dictionary;
