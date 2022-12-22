@@ -36,7 +36,6 @@ directories:
 
 # Add -fsanitize=address,undefined flag if release target is not used
 ifneq ($(MAKECMDGOALS),release)
-    CFLAGS += --coverage
     CFLAGS += -fsanitize=address,undefined
     CFLAGS  += -funroll-loops -fno-omit-frame-pointer -fno-optimize-sibling-calls
     CFLAGS  += -Werror -O0 -g

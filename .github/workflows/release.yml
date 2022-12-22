@@ -1,15 +1,13 @@
-name: "pre-release"
+name: "release"
 
 on:
   push:
-    branches:
-      - "main"
-    tags-ignore:
-      - "*"
+    tags:
+      - "v*"
 
 jobs:
-  pre-release:
-    name: "Pre Release"
+  tagged-release:
+    name: "Tagged Release"
     continue-on-error: true
     strategy:
       fail-fast: false
@@ -55,7 +53,7 @@ jobs:
           name: ${{ matrix.name }}.sha256
           path: ${{ steps.hash.outputs.sha256 }}
 
-      - name: "Release | Upload artifacts"
+      - name: "Release | Upload artifacts (binary)"
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}
@@ -72,7 +70,5 @@ jobs:
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
-          prerelease: true
-          title: "Development Build"
+          prerelease: false
           files: battleship-*/battleship*
