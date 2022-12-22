@@ -27,7 +27,7 @@ jobs:
 
       - name: "Run CMake"
         if: matrix.os == 'windows-latest'
-        run: cmake -S . -B build
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: "Run Makefile"
         if: matrix.os != 'windows-latest'
@@ -45,7 +45,7 @@ jobs:
           title: "Development Build"
           files: |
             if [ "$RUNNER_OS" == "Windows" ]; then
-              build\battleship
+              build\Release\battleship.exe
             else
               build/battleship
             fi
