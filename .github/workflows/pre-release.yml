@@ -32,7 +32,7 @@ jobs:
 
       - name: "Run CMake"
         if: matrix.os == 'windows-latest'
-        run: cmake -S . -B build --config Release
+        run: cmake -S . -B build --D CMAKE_BUILD_TYPE=Release
 
       - name: "Run Makefile"
         if: matrix.os != 'windows-latest'
@@ -49,7 +49,7 @@ jobs:
       - name: "Release | Upload artifacts"
         uses: actions/upload-artifact@v3
         with:
-          name: battleship-${{ matrix.os }}
+          name: ${{ matrix.name }}
           path: ${{ matrix.name }}
           
   upload_artifacts:
