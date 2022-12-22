@@ -28,11 +28,4 @@ jobs:
       - name: Run Makefile
         run: >-
           make release
-          
-          # Test the project
-          for i in $(find test/ -name "*.txt") 
-          do
-            echo "Testing $i";
-            build/battleship -f $i;
-            echo "Test $i passed\n"
-          done
+          find test/ -name "*.txt" -exec bash -c 'echo "Testing $1"; build/battleship -f "$1" 1> /dev/null; echo "Test $1 passed"' _ {} \;
