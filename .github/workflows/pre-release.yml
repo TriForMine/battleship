@@ -32,7 +32,7 @@ jobs:
           title: "Development Build"
           files: |
             if [ "$RUNNER_OS" == "Windows" ]; then
-              build/battleship.exe
+              build\battleship
             else
               build/battleship
             fi
