@@ -3,6 +3,11 @@
 
 #include <stdbool.h>
 #include <string.h>
+#include <stdio.h>
+#include <locale.h>
+#include "const.h"
+#include "tile.h"
+#include "stdprof.h"
 #include "helpers.h"
 #include "hmap.h"
 #include "tile.h"
@@ -12,6 +17,8 @@
 Board* createBoard(int WIDTH, int HEIGHT);
 void resetBoard(Board* board);
 void freeBoard(Board* board);
+void updateBoardShip(Board* board, Ship* ship, Coordinate newPos);
+void moveShip(Board* board, Ship* ship, Direction direction);
 Tile* getTile(Board* board, Coordinate coordinate);
 State getTileState(Board* board, Coordinate coordinate);
 
@@ -28,7 +35,6 @@ bool shipExists(Board* board, char* name);
 void printBoard(Board* board);
 
 /* Movements */
-void moveShip(Board* board, Ship* ship, Direction direction);
 bool handleCollision(Board* board, Ship* ship, Coordinate position);
 void moveUp(Board* board, Coordinate position);
 void moveDown(Board* board, Coordinate position);

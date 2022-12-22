@@ -1,8 +1,4 @@
 #include "board.h"
-#include "const.h"
-#include "tile.h"
-#include "stdprof.h"
-#include <stdio.h>
 
 /* Board */
 Board* createBoard(int width, int height) {
@@ -12,7 +8,7 @@ Board* createBoard(int width, int height) {
     board->WIDTH = width;
     board->HEIGHT = height;
     board->tiles = malloc_prof(sizeof(Tile) * board->WIDTH * board->HEIGHT);
-    board->ships_by_name = dictionary_create(board->WIDTH * board->HEIGHT);
+    board->ships_by_name = createDictionary(board->WIDTH * board->HEIGHT);
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
             initTile(getTile(board, createCoordinate(x, y)));
@@ -45,10 +41,40 @@ void freeBoard(Board* board) {
     }
 
     if (board->ships_by_name != NULL) {
-        dictionary_free(board->ships_by_name);
+        freeDictionary(board->ships_by_name);
         board->ships_by_name = NULL;
     }
     free_prof(board);
+}
+
+void updateBoardShip(Board* board, Ship* ship, Coordinate oldPos) {
+    unsigned int i;
+
+    /* Remove the ship from the old position */
+    for (i = 0; i < ship->type; ++i) {
+        Coordinate current;
+        if (ship->orientation == HORIZONTAL) {
+            current.x = oldPos.x + i;
+            current.y = oldPos.y;
+        } else {
+            current.x = oldPos.x;
+            current.y = oldPos.y + i;
+        }
+        removeTileShip(getTile(board, current));
+    }
+
+    /* Set the ship at the new position */
+    for (i = 0; i < ship->type; ++i) {
+        Coordinate current;
+        if (ship->orientation == HORIZONTAL) {
+            current.x = ship->head.x + i;
+            current.y = ship->head.y;
+        } else {
+            current.x = ship->head.x;
+            current.y = ship->head.y + i;
+        }
+        setTileShip(getTile(board, current), ship);
+    }
 }
 
 Tile* getTile(Board* board, Coordinate coordinate) { return &board->tiles[coordinate.x + coordinate.y * board->WIDTH]; }
@@ -82,16 +108,17 @@ void placeMine(Board* board, Coordinate position) { setTileState(getTile(board, 
 /* Ship Getters */
 Ship* getShip(Board* board, Coordinate position) { return getTile(board, position)->ship; }
 
-Ship* getShipWithName(Board* board, char* name) { return dictionary_lookup(board->ships_by_name, name); }
+Ship* getShipWithName(Board* board, char* name) { return dictionaryGet(board->ships_by_name, name); }
 
 bool shipExists(Board* board, char* name) { return getShipWithName(board, name) != NULL; }
 
 /* Printing */
 void printBoard(Board* board) {
-
     Ship* ship;
     Coordinate head;
     unsigned int x, y;
+
+    setlocale(LC_ALL, "");
 
     printf("  ");
     for (x = 0; x < board->WIDTH; ++x) {
@@ -139,119 +166,36 @@ void printBoard(Board* board) {
 
 /* Movements */
 void moveShip(Board* board, Ship* ship, Direction direction) {
-    unsigned int i;
-    Coordinate current;
-    Coordinate position;
-    position = ship->head;
+    /* Save the original position of the ship*/
+    Coordinate originalPos = ship->head;
+    Coordinate newPos = ship->head;
 
+    /* Update the position of the ship's head based on the direction*/
     switch (direction) {
         case UP:
-            position.y -= 1;
+            newPos.y -= 1;
             break;
         case DOWN:
-            position.y += 1;
+            newPos.y += 1;
             break;
         case LEFT:
-            position.x -= 1;
+            newPos.x -= 1;
             break;
         case RIGHT:
-            position.x += 1;
+            newPos.x += 1;
             break;
     }
 
-    if (ship->orientation == HORIZONTAL) {
-        switch (direction) {
-            case UP:
-            case DOWN:
-                if (handleCollision(board, ship, position)) {
-                    return;
-                }
-
-                for (i = 0; i < ship->type; ++i) {
-                    current.x = position.x + i;
-                    current.y = position.y;
-
-                    if (getTileState(board, current) == MINE) {
-                        ship->hits |= 1 << i;
-                    }
-
-                    removeTileShip(getTile(board, createCoordinate(current.x, ship->head.y)));
-                    setTileShip(getTile(board, createCoordinate(current.x, current.y)), ship);
-                }
-                break;
-            case LEFT:
-                if (handleCollision(board, ship, position)) {
-                    return;
-                }
-
-                if (getTileState(board, position) == MINE) {
-                    ship->hits |= 1 << 0;
-                }
-
-                removeTileShip(getTile(board, createCoordinate((ship->head.x + ship->type - 1), ship->head.y)));
-                setTileShip(getTile(board, position), ship);
-                break;
-            case RIGHT:
-                if (handleCollision(board, ship, position)) {
-                    return;
-                }
-
-                if (getTileState(board, createCoordinate((ship->head.x + ship->type), ship->head.y)) == MINE) {
-                    ship->hits |= 1 << (ship->type - 1);
-                }
-
-                removeTileShip(getTile(board, createCoordinate(ship->head.x, ship->head.y)));
-                setTileShip(getTile(board, createCoordinate((ship->head.x + ship->type), +position.y)), ship);
-                break;
-        }
-    } else {
-        switch (direction) {
-            case UP:
-                if (handleCollision(board, ship, position)) {
-                    return;
-                }
-
-                if (getTileState(board, position) == MINE) {
-                    ship->hits |= 1 << 0;
-                }
-
-                removeTileShip(getTile(board, createCoordinate(ship->head.x, (ship->head.y + ship->type - 1))));
-                setTileShip(getTile(board, position), ship);
-                break;
-            case DOWN:
-                if (handleCollision(board, ship, position)) {
-                    return;
-                }
-
-                if (getTileState(board, createCoordinate(ship->head.x, ship->head.y + ship->type)) == MINE) {
-                    ship->hits |= 1 << (ship->type - 1);
-                }
-
-                removeTileShip(getTile(board, createCoordinate(ship->head.x, ship->head.y)));
-                setTileShip(getTile(board, createCoordinate(position.x, (position.y + ship->type - 1))), ship);
-                break;
-            case LEFT:
-            case RIGHT:
-                if (handleCollision(board, ship, position)) {
-                    return;
-                }
-
-                for (i = 0; i < ship->type; ++i) {
-                    current.x = position.x;
-                    current.y = position.y + i;
-
-                    if (getTileState(board, current) == MINE) {
-                        ship->hits |= 1 << i;
-                    }
-
-                    removeTileShip(getTile(board, createCoordinate(ship->head.x, (ship->head.y + i))));
-                    setTileShip(getTile(board, createCoordinate(current.x, current.y)), ship);
-                }
-                break;
-        }
+    /* Check for collision on the whole ship*/
+    if (handleCollision(board, ship, newPos)) {
+        return;
     }
 
-    ship->head = position;
+    /* Update the ship's position on the board*/
+    ship->head = newPos;
+
+    /* Update the board to reflect the ship's new position*/
+    updateBoardShip(board, ship, originalPos);
 }
 
 /* check if moving the whole ship to the new position will collide with an existing bot, if it does couts hits for both bot and don't move them
@@ -262,27 +206,16 @@ bool handleCollision(Board* board, Ship* ship, Coordinate position) {
     Coordinate current;
     bool collision = false;
 
-    if (ship->orientation == HORIZONTAL) {
-        for (i = 0; i < ship->type; ++i) {
-            current.x = position.x + i;
-            current.y = position.y;
+    for (i = 0; i < ship->type; ++i) {
+        current.x = position.x + (ship->orientation == HORIZONTAL ? i : 0);
+        current.y = position.y + (ship->orientation == VERTICAL ? i : 0);
 
-            if (getTileState(board, current) == SHIP) {
-                collision = true;
-                ship->hits |= 1 << i;
-                getShip(board, current)->hits |= 1 << (current.x - getShip(board, current)->head.x);
-            }
-        }
-    } else {
-        for (i = 0; i < ship->type; ++i) {
-            current.x = position.x;
-            current.y = position.y + i;
-
-            if (getTileState(board, current) == SHIP) {
-                collision = true;
-                ship->hits |= 1 << i;
-                getShip(board, current)->hits |= 1 << (current.y - getShip(board, current)->head.y);
-            }
+        if (getTileState(board, current) == SHIP) {
+            collision = true;
+            ship->hits |= 1 << i;
+            getShip(board, current)->hits |=
+                1 << ((ship->orientation == HORIZONTAL) ? (current.x - getShip(board, current)->head.x)
+                                                        : (current.y - getShip(board, current)->head.y));
         }
     }
 

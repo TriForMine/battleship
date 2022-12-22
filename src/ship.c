@@ -18,7 +18,7 @@ Ship* createShip(Ship_Type type, Orientation orientation) {
 Ship* createShipWithName(Board* board, Ship_Type type, Orientation orientation, char* name) {
     Ship* ship = createShip(type, orientation);
     ship->name = name;
-    dictionary_insert(board->ships_by_name, name, ship);
+    dictionarySet(board->ships_by_name, name, ship);
     return ship;
 }
 

@@ -2,7 +2,7 @@
 #include "stdprof.h"
 
 /* Initialize a dictionary with a given capacity */
-Dictionary* dictionary_create(size_t capacity) {
+Dictionary* createDictionary(size_t capacity) {
     Dictionary* dictionary = malloc_prof(sizeof(Dictionary));
     dictionary->entries = calloc_prof(capacity, sizeof(DictionaryEntry*));
     dictionary->size = 0;
@@ -21,7 +21,7 @@ unsigned long hash(char* str) {
 }
 
 /* Insert a key-value pair into the dictionary */
-void dictionary_insert(Dictionary* dictionary, char* key, void* value) {
+void dictionarySet(Dictionary* dictionary, char* key, void* value) {
     size_t index;
     DictionaryEntry* entry;
 
@@ -38,7 +38,7 @@ void dictionary_insert(Dictionary* dictionary, char* key, void* value) {
 }
 
 /* Look up a value by its key in the dictionary */
-void* dictionary_lookup(Dictionary* dictionary, char* key) {
+void* dictionaryGet(Dictionary* dictionary, char* key) {
     DictionaryEntry* entry;
     size_t index;
 
@@ -57,7 +57,7 @@ void* dictionary_lookup(Dictionary* dictionary, char* key) {
 }
 
 /*Free the memory used by the dictionary*/
-void dictionary_free(Dictionary* dictionary) {
+void freeDictionary(Dictionary* dictionary) {
     size_t i;
     for (i = 0; i < dictionary->capacity; i++) {
         DictionaryEntry* entry = dictionary->entries[i];
