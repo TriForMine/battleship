@@ -50,6 +50,6 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -g $(OBJS) -o $(TARGET) $(LFLAGS)
 
 clean:
-	@${RM} -f $(OBJS) $(OUT) src/*.gcda src/*.gcno *~
+	@${RM} -f $(OBJS) $(OUT) *~
 	@${RMDIR} $(BUILDDIR)
 	@echo Cleaning done!
