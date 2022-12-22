@@ -65,6 +65,7 @@ jobs:
         with:
           tag_name: "latest"
           prerelease: true
-          title: "Development Build"
+          name: "Development Build"
+          generate_release_notes: true
           files: battleship-*/battleship*
           append_body: false
