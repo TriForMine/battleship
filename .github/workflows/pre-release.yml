@@ -31,4 +31,8 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            build/battleship
+            if [ "$RUNNER_OS" == "Windows" ]; then
+              build/battleship.exe
+            else
+              build/battleship
+            fi
