@@ -10,8 +10,9 @@ on:
 jobs:
   pre-release:
     name: "Pre Release"
-    runs-on: "ubuntu-latest"
-
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - name: "Checkout source code"
         uses: actions/checkout@master
