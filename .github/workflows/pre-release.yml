@@ -3,7 +3,9 @@ name: "pre-release"
 on:
   push:
     branches:
-      - "master"
+      - "main"
+    tags-ignore:
+      - "*"
 
 jobs:
   pre-release:
