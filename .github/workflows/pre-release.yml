@@ -43,17 +43,15 @@ jobs:
           mv build\battleship.exe ${{ matrix.name }}
 
       - name: "Calculate SHA-256 sum"
-        uses: peaceiris/actions-hash-action@v1.2.1
         id: hash
-        with:
-          algorithm: sha256
-          files: ${{ matrix.name }}
+        run:
+          openssl dgst -sha256 -r ${{ matrix.name }} | awk '{print $1}' > "${{ matrix.name }}.sha256"
 
       - name: "Release | Upload artifacts (sum)"
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.name }}.sha256
-          path: ${{ steps.hash.outputs.sha256 }}
+          path: ${{ matrix.name }}.sha256
 
       - name: "Release | Upload artifacts"
         uses: actions/upload-artifact@v3
