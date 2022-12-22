@@ -59,7 +59,7 @@ jobs:
 
   upload_artifacts:
     name: Add Build Artifacts to Release
-    needs: pre-release
+    needs: tagged-release
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
