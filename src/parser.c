@@ -9,7 +9,7 @@ void parseSTDIN(void) {
     char buffer[BUFFER_SIZE];
     unsigned int width, height;
     bool placing_mode = true;
-    char action[BUFFER_SIZE];
+    char action;
     char target[BUFFER_SIZE];
     int player;
 
@@ -27,18 +27,17 @@ void parseSTDIN(void) {
         } else if (strstr(buffer, "Jouer") != NULL) {
             /* This line signals the start of the game */
             placing_mode = false;
-        } else if (sscanf(buffer, "J%d %s", &player, action) == 2) {
+        } else if (sscanf(buffer, "J%d %c", &player, &action) == 2) {
             /* This line represents a player action */
 
-            if (strcmp(action, "T") == 0) {
+            if (action == 'T') {
                 unsigned int pos_x, pos_y;
 
                 /* This action has a target */
-                sscanf(buffer, "J%d %s %u:%u", &player, action, &pos_x, &pos_y);
+                sscanf(buffer, "J%d %c %u:%u", &player, &action, &pos_x, &pos_y);
                 fireAt(board, createCoordinate(pos_x, pos_y));
 
-            } else if (strcmp(action, "G") == 0 || strcmp(action, "D") == 0 || strcmp(action, "B") == 0
-                       || strcmp(action, "H") == 0) {
+            } else if (action == 'G' || action == 'D' || action == 'B' || action == 'H') {
                 Ship* ship = NULL;
                 char direction;
                 char movement_direction;
@@ -73,7 +72,7 @@ void parseSTDIN(void) {
                 moveShip(board, ship, movement_direction);
 
                 free_prof(ship_name);
-            } else if (strcmp(action, "P") == 0) {
+            } else if (action == 'P') {
                 int i;
                 unsigned int start_x, start_y, end_x, end_y, f;
                 char* ship_name = malloc_prof(sizeof(char) * MAX_LENGTH_NAME);
