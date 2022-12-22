@@ -25,7 +25,7 @@ jobs:
           DEEPSOURCE_DSN: ${{ secrets.DEEPSOURCE_DSN }}
         run: |
           # Install lcov
-          apt-get install lcov
+          sudo apt-get install lcov
           
           # Execute lcov
           lcov --directory src --capture --output-file coverage.info
