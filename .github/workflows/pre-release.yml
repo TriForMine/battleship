@@ -67,5 +67,5 @@ jobs:
           prerelease: true
           title: "Development Build"
           files: |
-            battleship-ubuntu-latest/battleship-ubuntu-latest
-            battleship-windows-latest.exe/battleship-windows-latest.exe
+            battleship-ubuntu-latest/battleship
+            battleship-windows-latest.exe/battleship.exe
