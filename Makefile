@@ -4,7 +4,7 @@ SOURCEDIR = $(PROJDIR)/src
 BUILDDIR := $(PROJDIR)/build
 
 CFLAGS  = -Wall -ansi -pedantic
-CFLAGS  += -funroll-loops -fno-omit-frame-pointer -fno-optimize-sibling-calls -fvisibility=hidden
+CFLAGS  += -funroll-loops -fno-omit-frame-pointer -fno-optimize-sibling-calls -fvisibility=hidden -fprofile-arcs -ftest-coverage
 CFLAGS  += -Werror -Os -g
 CFLAGS  += -Wextra -Wno-unused-parameter -Wno-unused-variable -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wstrict-prototypes -Wwrite-strings -Wunreachable-code -D_GNU_SOURCE
 
