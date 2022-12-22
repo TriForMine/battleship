@@ -14,7 +14,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        include: 
+          - os: ubuntu-latest
+            name: battleship-linux
+          - os: windows-latest
+            name: battleship-windows.exe
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Checkout source code"
@@ -28,29 +32,26 @@ jobs:
 
       - name: "Run CMake"
         if: matrix.os == 'windows-latest'
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S . -B build --config Release
 
       - name: "Run Makefile"
         if: matrix.os != 'windows-latest'
-        run: make
+        run: | 
+          make
+          mv build/battleship ${{ matrix.name }}
 
       - name: "Build project"
         if: matrix.os == 'windows-latest'
-        run: cmake --build build
+        run: | 
+          cmake --build build
+          mv build\Release\battleship.exe ${{ matrix.name }}
         
-      - name: "Release | Upload artifacts (Windows)"
+      - name: "Release | Upload artifacts"
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v3
         with:
-          name: battleship-${{ matrix.os }}.exe
-          path: build\Debug\battleship.exe
-          
-      - name: "Release | Upload artifacts (Other)"
-        if: matrix.os != 'windows-latest'
-        uses: actions/upload-artifact@v3
-        with:
           name: battleship-${{ matrix.os }}
-          path: build/battleship
+          path: ${{ matrix.name }}
           
   upload_artifacts:
     name: Add Build Artifacts to Release
