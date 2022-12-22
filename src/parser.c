@@ -73,8 +73,7 @@ void parseSTDIN(void) {
 
                 free_prof(ship_name);
             } else if (action == 'P') {
-                int i;
-                unsigned int start_x, start_y, end_x, end_y, f;
+                unsigned int start_x, start_y, end_x, end_y;
                 char* ship_name = malloc_prof(sizeof(char) * MAX_LENGTH_NAME);
                 Ship* ship;
 

@@ -4,9 +4,6 @@ SOURCEDIR = $(PROJDIR)/src
 BUILDDIR := $(PROJDIR)/build
 
 CFLAGS  = -Wall -ansi -pedantic
-CFLAGS  += -funroll-loops -fno-omit-frame-pointer -fno-optimize-sibling-calls -fvisibility=hidden -fprofile-arcs -ftest-coverage
-CFLAGS  += -Werror -Os -g
-CFLAGS  += -Wextra -Wno-unused-parameter -Wno-unused-variable -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wstrict-prototypes -Wwrite-strings -Wunreachable-code -D_GNU_SOURCE
 
 SOURCE	= $(wildcard $(SOURCEDIR)/*.c)
 HEADER	= $(wildcard $(SOURCEDIR)/*.h)
@@ -39,7 +36,11 @@ directories:
 
 # Add -fsanitize=address,undefined flag if release target is not used
 ifneq ($(MAKECMDGOALS),release)
+    CFLAGS += --coverage
     CFLAGS += -fsanitize=address,undefined
+    CFLAGS  += -funroll-loops -fno-omit-frame-pointer -fno-optimize-sibling-calls
+    CFLAGS  += -Werror -O0 -g
+    CFLAGS  += -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wstrict-prototypes -Wwrite-strings -Wunreachable-code
 endif
 
 release: CFLAGS += -static
@@ -50,6 +51,6 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -g $(OBJS) -o $(TARGET) $(LFLAGS)
 
 clean:
-	@${RM} -f $(OBJS) $(OUT) *~
+	@${RM} -f $(OBJS) $(OUT) src/*.gcda src/*.gcno *~
 	@${RMDIR} $(BUILDDIR)
 	@echo Cleaning done!

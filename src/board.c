@@ -290,7 +290,6 @@ bool handleCollision(Board* board, Ship* ship, Coordinate position) {
 }
 
 void moveUp(Board* board, Coordinate position) {
-    int i;
     Ship* ship = getShip(board, position);
     if (ship != NULL) {
         if (position.y > 0) {
