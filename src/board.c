@@ -8,7 +8,7 @@ Board* createBoard(int width, int height) {
     board->WIDTH = width;
     board->HEIGHT = height;
     board->tiles = malloc_prof(sizeof(Tile) * board->WIDTH * board->HEIGHT);
-    board->ships_by_name = createDictionary(board->WIDTH * board->HEIGHT);
+    board->ships_by_name = createDictionary((unsigned long long)board->WIDTH * (unsigned long long)board->HEIGHT);
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
             initTile(getTile(board, createCoordinate(x, y)));
