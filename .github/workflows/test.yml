@@ -27,5 +27,4 @@ jobs:
           fetch-depth: 1
       - name: Run Makefile
         run: >-
-          make release;
-          find test/ -name "*.txt" -exec bash -c 'echo "Testing $1"; build/battleship -f "$1" 1> /dev/null; echo "Test $1 passed"' _ {} \;
+          make release && find test/ -name "*.txt" -exec bash -c 'echo "Testing $1"; build/battleship -f "$1" 1> /dev/null; echo "Test $1 passed"' _ {} \;
