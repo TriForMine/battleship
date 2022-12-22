@@ -25,10 +25,6 @@ jobs:
         uses: actions/checkout@master
         with:
           fetch-depth: 1
-          
-      - name: "Install CMake"
-        if: matrix.os == 'windows-latest'
-        run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
 
       - name: "Run CMake"
         if: matrix.os == 'windows-latest'
@@ -44,7 +40,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         run: | 
           cmake --build build
-          mv build\Release\battleship.exe ${{ matrix.name }}
+          mv build\battleship.exe ${{ matrix.name }}
         
       - name: "Release | Upload artifacts"
         uses: actions/upload-artifact@v3
