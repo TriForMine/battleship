@@ -61,7 +61,7 @@ jobs:
         uses: actions/download-artifact@v3
 
       - name: Setup | Checksums
-        run: for file in battleship-*/battleship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
+        run: for file in battleship/battleship-*; do openssl dgst -sha256 -r "$file" | awk '{print $1}' > "${file}.sha256"; done
 
       - name: Setup | Publish Release
         run: gh release edit latest --draft=false --repo=TriForMine/battleship
@@ -71,5 +71,5 @@ jobs:
       - name: Build | Add Artifacts to Release
         uses: softprops/action-gh-release@v1
         with:
-          files: battleship-*/battleship-*
+          files: battleship/battleship-*
           tag_name: latest
