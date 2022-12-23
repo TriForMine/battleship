@@ -9,6 +9,7 @@
 Ship* createShip(Ship_Type type, Orientation orientation, char owner);
 Ship* createShipWithName(Board* board, Ship_Type type, Orientation orientation, char owner, char* name);
 bool isShipSunk(Ship* ship);
+bool isShipHitAtCoordinate(Ship* ship, Coordinate coordinate);
 void freeShip(Board* board, Ship* ship);
 
 #endif

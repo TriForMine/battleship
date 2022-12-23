@@ -10,6 +10,4 @@
 #include "core/interactive.h"
 #include "utils/version.h"
 
-Game game;
-
 #endif

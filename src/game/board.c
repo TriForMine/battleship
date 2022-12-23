@@ -82,6 +82,25 @@ Tile* getTile(Board* board, Coordinate coordinate) { return &board->tiles[coordi
 
 State getTileState(Board* board, Coordinate coordinate) { return getTile(board, coordinate)->state; }
 
+void getNearbyCoordinates(Board* board, Coordinate current, Coordinate* list, unsigned int* size) {
+    unsigned int i = 0;
+
+    if (current.x > 0) {
+        list[i++] = createCoordinate(current.x - 1, current.y);
+    }
+    if (current.x < board->WIDTH - 1) {
+        list[i++] = createCoordinate(current.x + 1, current.y);
+    }
+    if (current.y > 0) {
+        list[i++] = createCoordinate(current.x, current.y - 1);
+    }
+    if (current.y < board->HEIGHT - 1) {
+        list[i++] = createCoordinate(current.x, current.y + 1);
+    }
+
+    *size = i;
+}
+
 /* Checks */
 bool isCoordinateValid(Board* board, Coordinate coordinate) {
     return coordinate.x < board->WIDTH && coordinate.y < board->HEIGHT;
@@ -261,42 +280,6 @@ bool handleCollision(Board* board, Ship* ship, Coordinate position) {
     }
 
     return collision;
-}
-
-void moveUp(Board* board, Coordinate position) {
-    Ship* ship = getShip(board, position);
-    if (ship != NULL) {
-        if (position.y > 0) {
-            moveShip(board, ship, UP);
-        }
-    }
-}
-
-void moveDown(Board* board, Coordinate position) {
-    Ship* ship = getShip(board, position);
-    if (ship != NULL) {
-        if (position.y < board->HEIGHT - 1) {
-            moveShip(board, ship, DOWN);
-        }
-    }
-}
-
-void moveLeft(Board* board, Coordinate position) {
-    Ship* ship = getShip(board, position);
-    if (ship != NULL) {
-        if (position.x > 0) {
-            moveShip(board, ship, LEFT);
-        }
-    }
-}
-
-void moveRight(Board* board, Coordinate position) {
-    Ship* ship = getShip(board, position);
-    if (ship != NULL) {
-        if (position.x < board->WIDTH - 1) {
-            moveShip(board, ship, RIGHT);
-        }
-    }
 }
 
 /* Fire */

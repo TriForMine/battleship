@@ -20,7 +20,7 @@ typedef enum { UP, DOWN, LEFT, RIGHT } Direction;
 
 typedef enum { Player1, Player2 } GameTurn;
 
-typedef enum { DISABLED, RANDOM, HUNT_TARGET_PARITY, MONTE_CARLO_TREE_SEARCH } AI_Mode;
+typedef enum { DISABLED, RANDOM, HUNT_TARGET, MONTE_CARLO_TREE_SEARCH } AI_Mode;
 
 typedef enum { PLACING_SHIPS, PLAYING, ENDED } GameState;
 

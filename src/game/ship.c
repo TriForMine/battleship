@@ -25,6 +25,12 @@ Ship* createShipWithName(Board* board, Ship_Type type, Orientation orientation, 
 
 bool isShipSunk(Ship* ship) { return ship->hits == (1 << (int)ship->type) - 1; }
 
+bool isShipHitAtCoordinate(Ship* ship, Coordinate coordinate) {
+    Coordinate head = ship->head;
+
+    return (ship->hits & (1 << (ship->orientation == HORIZONTAL ? coordinate.x - head.x : coordinate.y - head.y))) != 0;
+}
+
 void freeShip(Board* board, Ship* ship) {
     unsigned int i;
 

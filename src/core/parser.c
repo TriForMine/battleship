@@ -27,7 +27,7 @@ void parseSTDIN(void) {
             }
 
             /* Create the board */
-            game = createGame(SHOW_ONE_BOARD, DISABLED, width, height);
+            game = createGame(SHOW_ONE_BOARD, DISABLED, 0, width, height);
         } else if (strstr(buffer, "Jouer") != NULL) {
             /* This line signals the start of the game */
             placing_mode = false;

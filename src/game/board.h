@@ -20,6 +20,7 @@ void updateBoardShip(Board* board, Ship* ship, Coordinate newPos);
 void moveShip(Board* board, Ship* ship, Direction direction);
 Tile* getTile(Board* board, Coordinate coordinate);
 State getTileState(Board* board, Coordinate coordinate);
+void getNearbyCoordinates(Board* board, Coordinate current, Coordinate* list, unsigned int* size);
 
 /* Checks */
 bool isCoordinateValid(Board* board, Coordinate coordinate);
@@ -38,10 +39,6 @@ void printBoard(Board* board, bool showShips);
 
 /* Movements */
 bool handleCollision(Board* board, Ship* ship, Coordinate position);
-void moveUp(Board* board, Coordinate position);
-void moveDown(Board* board, Coordinate position);
-void moveLeft(Board* board, Coordinate position);
-void moveRight(Board* board, Coordinate position);
 
 /* Fire */
 void fireAt(Board* board, Coordinate position);

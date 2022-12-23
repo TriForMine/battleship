@@ -3,11 +3,13 @@
 
 #include "../ai/common.h"
 #include "../ai/random_ai.h"
+#include "../ai/hunt_target.h"
 #include "../game/game.h"
 #include "../utils/const.h"
 #include "../utils/error.h"
 #include "../utils/stdprof.h"
 #include "../utils/types.h"
+#include "../utils/version.h"
 
 /* Main */
 Game* startGame(int shipLengths[], int shipLengthsLengths);

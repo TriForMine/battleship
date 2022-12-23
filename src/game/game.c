@@ -2,7 +2,7 @@
 #include "board.h"
 
 /* Game */
-Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int WIDTH, unsigned int HEIGHT) {
+Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int SEED, unsigned int WIDTH, unsigned int HEIGHT) {
     Game* game = malloc_prof(sizeof(Game));
     game->board1 = createBoard(WIDTH, HEIGHT);
     game->board2 = createBoard(WIDTH, HEIGHT);
@@ -11,9 +11,8 @@ Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int WIDTH, unsigne
     game->turn = Player1;
     game->remaining_ships[0] = 0;
     game->remaining_ships[1] = 0;
+    game->seed = SEED;
 
-    /* Initialize the random seed. */
-    game->seed = generate_random_seed();
     /* Initialize the random number generator. */
     srand(game->seed);
 
@@ -113,6 +112,50 @@ void move(Game* game, Ship* ship, Direction direction) {
     if (ship != NULL) {
         if (isShipSunk(ship)) {
             game->remaining_ships[game->turn == Player1 ? 1 : 0]--;
+        }
+    }
+}
+
+void moveUp(Game* game, Coordinate position) {
+    Board* board = getCurrentPlayerBoard(game);
+    Ship* ship = getShip(board, position);
+
+    if (ship != NULL) {
+        if (position.y > 0) {
+            move(game, ship, UP);
+        }
+    }
+}
+
+void moveDown(Game* game, Coordinate position) {
+    Board* board = getCurrentPlayerBoard(game);
+    Ship* ship = getShip(board, position);
+
+    if (ship != NULL) {
+        if (position.y < board->HEIGHT - 1) {
+            move(game, ship, DOWN);
+        }
+    }
+}
+
+void moveLeft(Game* game, Coordinate position) {
+    Board* board = getCurrentPlayerBoard(game);
+    Ship* ship = getShip(board, position);
+
+    if (ship != NULL) {
+        if (position.x > 0) {
+            move(game, ship, LEFT);
+        }
+    }
+}
+
+void moveRight(Game* game, Coordinate position) {
+    Board* board = getCurrentPlayerBoard(game);
+    Ship* ship = getShip(board, position);
+
+    if (ship != NULL) {
+        if (position.x < board->WIDTH - 1) {
+            move(game, ship, RIGHT);
         }
     }
 }

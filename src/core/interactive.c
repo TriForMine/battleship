@@ -1,4 +1,5 @@
 #include "interactive.h"
+#include "../utils/colors.h"
 
 Game* startGame(int shipLengths[], int shipLengthsLengths) {
     Game* game;
@@ -9,23 +10,39 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
     AI_Mode ai_mode = DISABLED;
     unsigned int WIDTH = 10;
     unsigned int HEIGHT = 10;
+    unsigned int seed = generate_random_seed();
     Coordinate coordinate;
     Orientation orientation;
 
-    printf("Please enter the width of the board: ");
+    printf("Please enter the ");
+    SET_BLUE_TEXT();
+    printf("width");
+    RESET_TEXT_COLOR();
+    printf(" of the board: ");
+    
     fgets(buffer, BUFFER_SIZE, stdin);
     WIDTH = strtol(buffer, NULL, 10);
-    printf("Please enter the height of the board: ");
+    printf("Please enter the " ANSI_COLOR_BLUE "height" ANSI_COLOR_RESET " of the board: ");
     fgets(buffer, BUFFER_SIZE, stdin);
     HEIGHT = strtol(buffer, NULL, 10);
-    printf("Please enter the AI mode (0 = disabled, 1 = random, 2 = smart, 3 = MCTF): ");
+    printf("Please enter the " ANSI_COLOR_BLUE "ai mode" ANSI_COLOR_RESET " (" ANSI_COLOR_YELLOW "0" ANSI_COLOR_RESET
+           " = disabled, " ANSI_COLOR_YELLOW "1" ANSI_COLOR_RESET " = random, " ANSI_COLOR_YELLOW "2" ANSI_COLOR_RESET
+           " = hunt and target, " ANSI_COLOR_YELLOW "3" ANSI_COLOR_RESET " = MCTF): ");
     fgets(buffer, BUFFER_SIZE, stdin);
     ai_mode = strtol(buffer, NULL, 10);
     if (ai_mode > 3) {
         ai_mode = DISABLED;
     }
 
-    game = createGame(false, ai_mode, WIDTH, HEIGHT);
+    if (ai_mode != DISABLED) {
+        printf("\nGame will be played against the" ANSI_COLOR_BLUE " %s " ANSI_COLOR_RESET "AI.\n",
+               ai_mode == RANDOM        ? "random"
+               : ai_mode == HUNT_TARGET ? "hunt and target"
+                                        : "MCTF");
+        printf("The game seed is" ANSI_COLOR_RED " %u" ANSI_COLOR_RESET ".\n\n", seed);
+    }
+
+    game = createGame(false, ai_mode, seed, WIDTH, HEIGHT);
 
     /* Ask if he wants to place manually or automatically */
     printf("Do you want to place your ships manually? (y/n): ");
@@ -72,17 +89,20 @@ void handleInteractiveGame(void) {
     char buffer[BUFFER_SIZE];
     Game* game = NULL;
 
-    printf("Welcome to Battleship!\n");
+    printf(ANSI_COLOR_BLUE "Battleship %s" ANSI_COLOR_RESET "\n", PROGRAM_VERSION);
+    printf("Written by: Quentin Nicolini and Samy Ben dhiab\n\n");
     game = startGame(shipLengths, shipLengthsLengths);
     game->remaining_ships[0] = 5;
     game->remaining_ships[1] = 5;
 
     printCurrentGame(game);
     while (game->state != ENDED && fgets(buffer, BUFFER_SIZE, stdin) != NULL) {
-        if (false == parseLine(game, buffer)) {
+        /*if (false == parseLine(game, buffer)) {
             printCurrentGame(game);
             continue;
-        }
+        }*/
+
+        playRandomAI(game);
 
         if (game->state == PLAYING && checkVictory(game)) {
             game->state = ENDED;
@@ -114,6 +134,9 @@ void performAiTurn(Game* game) {
             case RANDOM:
                 playRandomAI(game);
                 break;
+            case HUNT_TARGET:
+                playHuntTargetAI(game);
+                break;
             default:
                 return;
         }
@@ -143,23 +166,21 @@ bool parseLine(Game* game, char* line) {
 
             switch (param) {
                 case 'H':
-                    moveUp(board, coordinate);
+                    moveUp(game, coordinate);
                     break;
                 case 'B':
-                    moveDown(board, coordinate);
+                    moveDown(game, coordinate);
                     break;
                 case 'G':
-                    moveLeft(board, coordinate);
+                    moveLeft(game, coordinate);
                     break;
                 case 'D':
-                    moveRight(board, coordinate);
+                    moveRight(game, coordinate);
                     break;
                 default:
                     printf("Invalid parameter for move command!\n");
                     return false;
             }
-
-            setGameTurnToOpponent(game);
         } else {
             printf("Invalid command!\n");
             return false;
