@@ -126,7 +126,8 @@ unsigned int getShipProbability(Board* board, Coordinate coordinate, Ship_Type s
 /* Calculates the probability density for all ships */
 unsigned int* calculateProbabilityDensity(Board* board) {
     unsigned int x, y;
-    unsigned int* probability_density = calloc_prof(board->WIDTH * board->HEIGHT, sizeof(unsigned int));
+    unsigned int* probability_density =
+        calloc_prof((unsigned long)board->WIDTH * (unsigned long)board->HEIGHT, sizeof(unsigned int));
 
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
