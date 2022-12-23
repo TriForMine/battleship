@@ -15,19 +15,40 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
     Orientation orientation;
 
     printf("Please enter the ");
-    SET_BLUE_TEXT();
-    printf("width");
-    RESET_TEXT_COLOR();
+    PRINT_BLUE_TEXT("width");
     printf(" of the board: ");
-    
+
     fgets(buffer, BUFFER_SIZE, stdin);
     WIDTH = strtol(buffer, NULL, 10);
-    printf("Please enter the " ANSI_COLOR_BLUE "height" ANSI_COLOR_RESET " of the board: ");
+
+    printf("Please enter the ");
+    PRINT_BLUE_TEXT("height");
+    printf(" of the board: ");
+
     fgets(buffer, BUFFER_SIZE, stdin);
     HEIGHT = strtol(buffer, NULL, 10);
-    printf("Please enter the " ANSI_COLOR_BLUE "ai mode" ANSI_COLOR_RESET " (" ANSI_COLOR_YELLOW "0" ANSI_COLOR_RESET
-           " = disabled, " ANSI_COLOR_YELLOW "1" ANSI_COLOR_RESET " = random, " ANSI_COLOR_YELLOW "2" ANSI_COLOR_RESET
-           " = hunt and target, " ANSI_COLOR_YELLOW "3" ANSI_COLOR_RESET " = MCTF): ");
+
+    printf("Please enter the ");
+
+    PRINT_BLUE_TEXT("ai mode");
+
+    printf(" (");
+
+    PRINT_YELLOW_TEXT("0");
+
+    printf(" = disabled, ");
+
+    PRINT_YELLOW_TEXT("1");
+
+    printf(" = random, ");
+
+    PRINT_YELLOW_TEXT("2");
+
+    printf(" = hunt and target, ");
+    PRINT_YELLOW_TEXT("3");
+
+    printf(" = MCTF): ");
+
     fgets(buffer, BUFFER_SIZE, stdin);
     ai_mode = strtol(buffer, NULL, 10);
     if (ai_mode > 3) {
@@ -35,11 +56,17 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
     }
 
     if (ai_mode != DISABLED) {
-        printf("\nGame will be played against the" ANSI_COLOR_BLUE " %s " ANSI_COLOR_RESET "AI.\n",
-               ai_mode == RANDOM        ? "random"
-               : ai_mode == HUNT_TARGET ? "hunt and target"
-                                        : "MCTF");
-        printf("The game seed is" ANSI_COLOR_RED " %u" ANSI_COLOR_RESET ".\n\n", seed);
+        printf("\nGame will be played against the");
+        SET_BLUE_TEXT();
+        printf(" %s ", ai_mode == RANDOM ? "random" : ai_mode == HUNT_TARGET ? "hunt and target" : "MCTF");
+        RESET_TEXT_COLOR();
+        printf("AI.\n");
+
+        printf("The game seed is");
+        SET_RED_TEXT();
+        printf(" %u", seed);
+        RESET_TEXT_COLOR();
+        printf(".\n\n");
     }
 
     game = createGame(false, ai_mode, seed, WIDTH, HEIGHT);
@@ -51,7 +78,16 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
         /* Place manually */
         for (i = 0; i < shipLengthsLengths; i++) {
             printBoard(getCurrentPlayerBoard(game), true);
-            printf("Please enter the orientation of the %d ship (0 = horizontal, 1 = vertical): ", shipLengths[i]);
+            printf("Please enter the orientation of the %d ship (", shipLengths[i]);
+
+            PRINT_RED_TEXT("0");
+
+            printf(" = horizontal, ");
+
+            PRINT_YELLOW_TEXT("1");
+
+            printf(" = vertical): ");
+
             fgets(buffer, BUFFER_SIZE, stdin);
             orientation = strtol(buffer, NULL, 10);
             printf("Please enter the coordinate of the %d ship (e.g. A1): ", shipLengths[i]);
@@ -89,7 +125,10 @@ void handleInteractiveGame(void) {
     char buffer[BUFFER_SIZE];
     Game* game = NULL;
 
-    printf(ANSI_COLOR_BLUE "Battleship %s" ANSI_COLOR_RESET "\n", PROGRAM_VERSION);
+    SET_BLUE_TEXT();
+    printf("Battleship %s\n", PROGRAM_VERSION);
+    RESET_TEXT_COLOR();
+
     printf("Written by: Quentin Nicolini and Samy Ben dhiab\n\n");
     game = startGame(shipLengths, shipLengthsLengths);
     game->remaining_ships[0] = 5;
@@ -97,12 +136,10 @@ void handleInteractiveGame(void) {
 
     printCurrentGame(game);
     while (game->state != ENDED && fgets(buffer, BUFFER_SIZE, stdin) != NULL) {
-        /*if (false == parseLine(game, buffer)) {
+        if (false == parseLine(game, buffer)) {
             printCurrentGame(game);
             continue;
-        }*/
-
-        playRandomAI(game);
+        }
 
         if (game->state == PLAYING && checkVictory(game)) {
             game->state = ENDED;

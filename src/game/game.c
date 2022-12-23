@@ -99,7 +99,7 @@ void fire(Game* game, Coordinate coordinate) {
 
     if (ship != NULL) {
         if (isShipSunk(ship)) {
-            game->remaining_ships[game->turn == Player1 ? 1 : 0]--;
+            game->remaining_ships[game->turn == Player1 ? 0 : 1]--;
         }
     }
 }
@@ -111,7 +111,7 @@ void move(Game* game, Ship* ship, Direction direction) {
 
     if (ship != NULL) {
         if (isShipSunk(ship)) {
-            game->remaining_ships[game->turn == Player1 ? 1 : 0]--;
+            game->remaining_ships[game->turn == Player1 ? 0 : 1]--;
         }
     }
 }

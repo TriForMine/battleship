@@ -27,4 +27,29 @@
 #define SET_CYAN_TEXT()       SET_TEXT_COLOR(36)
 #endif
 
+#define PRINT_RED_TEXT(text)                                                                                           \
+    SET_RED_TEXT();                                                                                                    \
+    printf(text);                                                                                                      \
+    RESET_TEXT_COLOR()
+#define PRINT_GREEN_TEXT(text)                                                                                         \
+    SET_GREEN_TEXT();                                                                                                  \
+    printf(text);                                                                                                      \
+    RESET_TEXT_COLOR()
+#define PRINT_YELLOW_TEXT(text)                                                                                        \
+    SET_YELLOW_TEXT();                                                                                                 \
+    printf(text);                                                                                                      \
+    RESET_TEXT_COLOR()
+#define PRINT_BLUE_TEXT(text)                                                                                          \
+    SET_BLUE_TEXT();                                                                                                   \
+    printf(text);                                                                                                      \
+    RESET_TEXT_COLOR()
+#define PRINT_MAGENTA_TEXT(text)                                                                                       \
+    SET_MAGENTA_TEXT();                                                                                                \
+    printf(text);                                                                                                      \
+    RESET_TEXT_COLOR()
+#define PRINT_CYAN_TEXT(text)                                                                                          \
+    SET_CYAN_TEXT();                                                                                                   \
+    printf(text);                                                                                                      \
+    RESET_TEXT_COLOR()
+
 #endif /* BATTLESHIP_COLORS_H */

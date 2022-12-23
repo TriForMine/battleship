@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "../utils/const.h"
+#include "../utils/colors.h"
 #include "../utils/error.h"
 #include "tile.h"
 #include "../utils/stdprof.h"
