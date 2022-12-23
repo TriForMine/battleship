@@ -131,7 +131,8 @@ void handleInteractiveGame(void) {
 
     printf("Written by: Quentin Nicolini and Samy Ben dhiab\n\n");
     game = startGame(shipLengths, shipLengthsLengths);
-
+    game->remaining_ships[0] = 5;
+    game->remaining_ships[1] = 5;
     printCurrentGame(game);
     while (game->state != ENDED && fgets(buffer, BUFFER_SIZE, stdin) != NULL) {
         if (false == parseLine(game, buffer)) {
