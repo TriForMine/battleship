@@ -29,7 +29,7 @@ jobs:
       - name: "Build Project (Windows)"
         if: matrix.os == 'windows-latest'
         run: |
-          cmake -G Ninja -DPROGRAM_VERSION=${{github.sha}} -DCMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -G Ninja -DPROGRAM_VERSION="${{github.sha}}" -DCMAKE_BUILD_TYPE=Release -S . -B build
           cmake --build build -- -j 2
           mv build\battleship.exe ${{ matrix.name }}
 
