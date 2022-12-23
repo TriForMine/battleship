@@ -127,8 +127,8 @@ bool parseLine(Game* game, char* line) {
     char param;
     Ship* ship;
     Board* board;
-    char command[BUFFER_SIZE];
-    count = sscanf(line, "%s %2s %c", command, str_coordinate, &param);
+    char command[10];
+    count = sscanf(line, "%10s %2s %c", command, str_coordinate, &param);
     board = getPlayerBoard(game, '1');
 
     parseCoordinate(str_coordinate, &coordinate);
