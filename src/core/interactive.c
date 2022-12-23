@@ -62,7 +62,7 @@ void printCurrentGame(Game* game) {
     printf("\nPlease use one of the following commands:\n");
     printf("1. Attack a coordinate (e.g. fire A1)\n");
     printf("2. Move a ship (e.g. move A1 D)\n");
-    printf("3. Quit (e.g. quit)\n\n");
+    printf("3. Quit (e.g. exit)\n\n");
 }
 
 void handleInteractiveGame(void) {
