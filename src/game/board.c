@@ -162,53 +162,64 @@ bool shipExists(Board* board, char* name) { return getShipWithName(board, name) 
 /* Printing */
 void printBoard(Board* board, bool showShips) {
     Ship* ship;
-    Coordinate head;
+
+    /* Constants for ASCII character codes*/
+    const int UPPERCASE_A = 'A';
+    const int SPACE = ' ';
+
+    /* Get the dimensions of the board*/
+    const unsigned int width = board->WIDTH;
+    const unsigned int height = board->HEIGHT;
+
     unsigned int x, y;
 
+    /*Print the column labels*/
     printf("  ");
-    for (x = 0; x < board->WIDTH; ++x) {
+    for (x = 0; x < width; ++x) {
         printf("%d ", x);
     }
     printf("\n");
-    for (y = 0; y < board->HEIGHT; ++y) {
-        printf("%c ", 65 + y);
-        for (x = 0; x < board->WIDTH; ++x) {
-            switch (board->tiles[x + y * board->WIDTH].state) {
+
+    /* Iterate through each tile in the board*/
+    for (y = 0; y < height; ++y) {
+        /* Print the row label*/
+        printf("%c ", UPPERCASE_A + y);
+
+        for (x = 0; x < width; ++x) {
+            /* Get the state of the current tile*/
+            State state = board->tiles[x + y * width].state;
+
+            /* Print the appropriate character for the tile state*/
+            switch (state) {
                 case WATER:
-                    printf("~ ");
+                    PRINT_BLUE_TEXT("~ ");
                     break;
                 case SHIP:
+                    /* Get the ship that occupies the tile*/
                     ship = getShip(board, createCoordinate(x, y));
-                    head = ship->head;
 
-                    if (ship->orientation == HORIZONTAL) {
-                        if (ship->hits == (1 << ship->type) - 1) {
-                            printf(ANSI_COLOR_CYAN "□" ANSI_COLOR_RESET " ");
-                        } else if (ship->hits >> (x - head.x) & 1) {
-                            printf(ANSI_COLOR_RED "□" ANSI_COLOR_RESET " ");
-                        } else if (showShips) {
-                            printf("■ ");
-                        } else {
-                            printf(ANSI_COLOR_BLUE "~ " ANSI_COLOR_RESET);
-                        }
+                    /* Check if the ship has been completely sunk*/
+                    if (ship->hits == (1 << ship->type) - 1) {
+                        PRINT_CYAN_TEXT("□ ");
                     } else {
-                        if (ship->hits == (1 << ship->type) - 1) {
-                            printf(ANSI_COLOR_CYAN "□" ANSI_COLOR_RESET " ");
-                        } else if (ship->hits >> (y - head.y) & 1) {
-                            printf(ANSI_COLOR_RED "□" ANSI_COLOR_RESET " ");
+                        /* Check if the current tile has been hit*/
+                        if (isShipHitAtCoordinate(ship, createCoordinate(x, y))) {
+                            PRINT_RED_TEXT("□ ");
                         } else if (showShips) {
+                            /* Print a square if the ship is not sunk and showShips is true*/
                             printf("■ ");
                         } else {
-                            printf(ANSI_COLOR_BLUE "~ " ANSI_COLOR_RESET);
+                            /* Print water if the ship is not sunk and showShips is false*/
+                            PRINT_BLUE_TEXT("~ ");
                         }
                     }
-
                     break;
                 case MINE:
-                    printf(ANSI_COLOR_YELLOW "⚠" ANSI_COLOR_RESET " ");
+                    PRINT_YELLOW_TEXT("⚠ ");
                     break;
                 default:
-                    printf("  ");
+                    /* Print two spaces for other tile states*/
+                    printf("%c%c", SPACE, SPACE);
                     break;
             }
         }
