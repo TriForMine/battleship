@@ -28,11 +28,13 @@ void printGame(Game* game) {
             printf("Player 1's turn\n");
 
             printBoard(game->board1, true);
+            printf("\n");
             printBoard(game->board2, false);
         } else {
             printf("Player 2's turn\n");
 
             printBoard(game->board2, true);
+            printf("\n");
             printBoard(game->board1, false);
         }
     }
