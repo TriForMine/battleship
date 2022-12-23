@@ -55,6 +55,9 @@ ifneq ($(MAKECMDGOALS),release)
     CFLAGS  += -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wstrict-prototypes -Wwrite-strings -Wunreachable-code
 endif
 
+debug: CFLAGS += -DDEBUG_MODE
+debug: all
+
 release: CFLAGS += -static
 release: all
 

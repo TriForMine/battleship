@@ -4,9 +4,7 @@ void playHuntTargetAI(Game* game) {
     Coordinate coordinate;
     Board* board = getOtherPlayerBoard(game);
     do {
-        printf("AI is thinking...\n");
         coordinate = getNextTarget(board);
-        printf("AI fired at (%d, %d)\n", coordinate.x, coordinate.y);
     } while (game->state == PLAYING && getTileState(board, coordinate) == MINE);
     fire(game, coordinate);
 }
@@ -17,8 +15,6 @@ void getTargetList(Board* board, Coordinate* result, int* size) {
     State state;
     unsigned int i, j;
     int k = 0;
-
-    printf("Getting target list...\n");
 
     for (i = 0; i < board->WIDTH; i += 1) {
         for (j = 0; j < board->HEIGHT; j += 1) {
@@ -50,8 +46,6 @@ void getPriorityTargetList(Board* board, Coordinate* targetList, int targetListS
     Ship* ship;
     unsigned int i, j, k, l;
 
-    printf("Getting priority target list...\n");
-
     for (i = 0; i < board->WIDTH; ++i) {
         for (j = 0; j < board->HEIGHT; ++j) {
             current.x = i;
@@ -59,8 +53,6 @@ void getPriorityTargetList(Board* board, Coordinate* targetList, int targetListS
             state = getTileState(board, current);
             ship = getShip(board, current);
             if (state == SHIP && isShipHitAtCoordinate(ship, current) == true && isShipSunk(ship) == false) {
-                printf("Found a hit ship at (%d, %d)\n", current.x, current.y);
-
                 getNearbyCoordinates(board, current, result, &k);
                 if (k > 0) {
                     for (l = 0; l < k; ++l) {
@@ -85,8 +77,6 @@ void getPriorityTargetList(Board* board, Coordinate* targetList, int targetListS
         }
     }
 
-    printf("Found %d priority targets\n", *size);
-
     if (result != NULL) {
         free_prof(result);
     }
@@ -97,7 +87,6 @@ Coordinate getRandomTarget(Board* board, Coordinate* targetList, int size) {
     Coordinate result;
     int i;
     if (size == 0) {
-        printf("Error: target list is empty");
         do {
             result.x = rand() % board->WIDTH;
             result.y = rand() % board->HEIGHT;

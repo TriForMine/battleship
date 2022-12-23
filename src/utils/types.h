@@ -20,7 +20,7 @@ typedef enum { UP, DOWN, LEFT, RIGHT } Direction;
 
 typedef enum { Player1, Player2 } GameTurn;
 
-typedef enum { DISABLED, RANDOM, HUNT_TARGET, MONTE_CARLO_TREE_SEARCH } AI_Mode;
+typedef enum { DISABLED, RANDOM, HUNT_TARGET, PROBABILITY_TARGETING } AI_Mode;
 
 typedef enum { PLACING_SHIPS, PLAYING, ENDED } GameState;
 
@@ -37,7 +37,6 @@ typedef struct {
     /* Bitfields of hits */
     int hits;
     Coordinate head;
-    char owner;
 } Ship;
 
 /* Tile */
@@ -61,6 +60,8 @@ typedef struct {
     GameTurn turn;
     bool single_board;
     unsigned int remaining_ships[2];
+    Ship* player_1_ships[5];
+    Ship* player_2_ships[5];
     unsigned int seed;
     AI_Mode ai_mode;
     GameState state;

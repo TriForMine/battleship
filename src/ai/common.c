@@ -38,8 +38,8 @@ void placeRandomShips(Board* board, const int* shipLengths, int shipLengthsLengt
             if (!success) {
                 continue;
             }
-            
-            placeShip(board, createShip(shipLength, orientation, 2), createCoordinate(x, y));
+
+            placeShip(board, createShip(shipLength, orientation), createCoordinate(x, y));
         } while (success == false);
     }
 }

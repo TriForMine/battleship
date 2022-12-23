@@ -106,6 +106,21 @@ bool isCoordinateValid(Board* board, Coordinate coordinate) {
     return coordinate.x < board->WIDTH && coordinate.y < board->HEIGHT;
 }
 
+bool isTileUnknown(Board* board, Coordinate coordinate) {
+    State state = getTileState(board, coordinate);
+    return state == WATER || (state == SHIP && isShipHitAtCoordinate(getShip(board, coordinate), coordinate) == false);
+}
+
+bool isTileHit(Board* board, Coordinate coordinate) {
+    Ship* ship = getShip(board, coordinate);
+    return ship != NULL && isShipHitAtCoordinate(ship, coordinate) && isShipSunk(ship) == false;
+}
+
+bool isTileFired(Board* board, Coordinate coordinate) {
+    State state = getTileState(board, coordinate);
+    return state == MINE || isTileHit(board, coordinate);
+}
+
 /* Ship Placements */
 void placeShip(Board* board, Ship* ship, Coordinate position) {
     unsigned int i;
@@ -156,8 +171,6 @@ void placeMine(Board* board, Coordinate position) { setTileState(getTile(board, 
 Ship* getShip(Board* board, Coordinate position) { return getTile(board, position)->ship; }
 
 Ship* getShipWithName(Board* board, char* name) { return dictionaryGet(board->ships_by_name, name); }
-
-bool shipExists(Board* board, char* name) { return getShipWithName(board, name) != NULL; }
 
 /* Printing */
 void printBoard(Board* board, bool showShips) {

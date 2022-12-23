@@ -25,6 +25,9 @@ void getNearbyCoordinates(Board* board, Coordinate current, Coordinate* list, un
 
 /* Checks */
 bool isCoordinateValid(Board* board, Coordinate coordinate);
+bool isTileUnknown(Board* board, Coordinate coordinate);
+bool isTileHit(Board* board, Coordinate coordinate);
+bool isTileFired(Board* board, Coordinate coordinate);
 
 /* Ship Placements */
 void placeShip(Board* board, Ship* ship, Coordinate position);
@@ -33,7 +36,6 @@ void placeMine(Board* board, Coordinate position);
 /* Ship Getters */
 Ship* getShip(Board* board, Coordinate position);
 Ship* getShipWithName(Board* board, char* name);
-bool shipExists(Board* board, char* name);
 
 /* Printing */
 void printBoard(Board* board, bool showShips);

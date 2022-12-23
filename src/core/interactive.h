@@ -1,9 +1,11 @@
 #ifndef BATTLESHIP_INTERACTIVE_H
 #define BATTLESHIP_INTERACTIVE_H
 
+#include <ctype.h>
 #include "../ai/common.h"
 #include "../ai/random_ai.h"
 #include "../ai/hunt_target.h"
+#include "../ai/probability_targeting.h"
 #include "../game/game.h"
 #include "../utils/const.h"
 #include "../utils/error.h"

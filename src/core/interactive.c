@@ -47,7 +47,7 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
     printf(" = hunt and target, ");
     PRINT_YELLOW_TEXT("3");
 
-    printf(" = MCTF): ");
+    printf(" = probability targeting): ");
 
     fgets(buffer, BUFFER_SIZE, stdin);
     ai_mode = strtol(buffer, NULL, 10);
@@ -93,7 +93,7 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
             printf("Please enter the coordinate of the %d ship (e.g. A1): ", shipLengths[i]);
             fgets(buffer, BUFFER_SIZE, stdin);
             parseCoordinate(buffer, &coordinate);
-            placeShip(getPlayerBoard(game, '1'), createShip(shipLengths[i], orientation, '1'), coordinate);
+            placeShip(getPlayerBoard(game, '1'), createShip(shipLengths[i], orientation), coordinate);
             clearConsole();
         }
     } else {
@@ -131,8 +131,6 @@ void handleInteractiveGame(void) {
 
     printf("Written by: Quentin Nicolini and Samy Ben dhiab\n\n");
     game = startGame(shipLengths, shipLengthsLengths);
-    game->remaining_ships[0] = 5;
-    game->remaining_ships[1] = 5;
 
     printCurrentGame(game);
     while (game->state != ENDED && fgets(buffer, BUFFER_SIZE, stdin) != NULL) {
@@ -173,6 +171,9 @@ void performAiTurn(Game* game) {
                 break;
             case HUNT_TARGET:
                 playHuntTargetAI(game);
+                break;
+            case PROBABILITY_TARGETING:
+                playProbabilityTargetingAI(game);
                 break;
             default:
                 return;
@@ -252,6 +253,12 @@ bool parseLine(Game* game, char* line) {
 }
 
 void parseCoordinate(const char* str, Coordinate* coordinate) {
+    char letter = str[0];
+    if (letter >= 'a' && letter <= 'z') {
+        letter -= 'a' - 'A';
+    } else if (letter < 'A' || letter > 'Z') {
+        letter = 'A';
+    }
     coordinate->x = strtol(str + 1, NULL, 10);
-    coordinate->y = str[0] - 'A';
+    coordinate->y = letter - 'A';
 }

@@ -119,7 +119,7 @@ void parseSTDIN(void) {
                         RAISE_ERROR_WITH_LINE(ERR_INVALID_SHIP_TYPE, line);
                     }
 
-                    ship = createShipWithName(board, end_y - start_y + 1, VERTICAL, player, ship_name);
+                    ship = createShipWithName(board, end_y - start_y + 1, VERTICAL, ship_name);
                 } else if (sscanf(buffer, "J%c P \"%[^\"]\" %u-%u:%u", &player, ship_name, &start_x, &end_x, &start_y)
                            == 5) {
                     /* This is a horizontal ship */
@@ -129,7 +129,7 @@ void parseSTDIN(void) {
                         RAISE_ERROR_WITH_LINE(ERR_INVALID_SHIP_TYPE, line);
                     }
 
-                    ship = createShipWithName(board, end_x - start_x + 1, HORIZONTAL, player, ship_name);
+                    ship = createShipWithName(board, end_x - start_x + 1, HORIZONTAL, ship_name);
                 } else if (sscanf(buffer, "J%c P \"%[^\"]\" %u:%u", &player, ship_name, &start_x, &start_y) == 4) {
                     /* This is a horizontal ship */
                     end_x = start_x;
@@ -139,7 +139,7 @@ void parseSTDIN(void) {
                         RAISE_ERROR_WITH_LINE(ERR_INVALID_SHIP_TYPE, line);
                     }
 
-                    ship = createShipWithName(board, 1, HORIZONTAL, player, ship_name);
+                    ship = createShipWithName(board, 1, HORIZONTAL, ship_name);
                 } else if (sscanf(buffer, "J%c P %u:%u-%u", &player, &start_x, &start_y, &end_y) == 4) {
                     /* This is a vertical ship */
                     end_x = start_x;
@@ -148,7 +148,7 @@ void parseSTDIN(void) {
                         RAISE_ERROR_WITH_LINE(ERR_INVALID_SHIP_TYPE, line);
                     }
 
-                    ship = createShip(end_y - start_y + 1, VERTICAL, player);
+                    ship = createShip(end_y - start_y + 1, VERTICAL);
                     free_prof(ship_name);
                 } else if (sscanf(buffer, "J%c P %u-%u:%u", &player, &start_x, &end_x, &start_y) == 4) {
                     /* This is a horizontal ship */
@@ -158,7 +158,7 @@ void parseSTDIN(void) {
                         RAISE_ERROR_WITH_LINE(ERR_INVALID_SHIP_TYPE, line);
                     }
 
-                    ship = createShip(end_x - start_x + 1, HORIZONTAL, player);
+                    ship = createShip(end_x - start_x + 1, HORIZONTAL);
                     free_prof(ship_name);
                 } else if (sscanf(buffer, "J%c P %u:%u", &player, &start_x, &start_y) == 3) {
                     /* This is a horizontal ship */
@@ -169,7 +169,7 @@ void parseSTDIN(void) {
                         RAISE_ERROR_WITH_LINE(ERR_INVALID_SHIP_TYPE, line);
                     }
 
-                    ship = createShip(1, HORIZONTAL, player);
+                    ship = createShip(1, HORIZONTAL);
                     free_prof(ship_name);
                 } else {
                     RAISE_ERROR_WITH_LINE(ERR_INVALID_SHIP_PLACEMENT, line);
