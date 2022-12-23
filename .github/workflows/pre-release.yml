@@ -26,21 +26,18 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: "Run CMake"
+      - name: "Build Project (Windows)"
         if: matrix.os == 'windows-latest'
-        run: cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
+        run: |
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXE_LINKER -S . -B build
+          cmake --build build -- -j 2
+          mv build\battleship.exe ${{ matrix.name }}
 
-      - name: "Run Makefile"
+      - name: "Build Project (Linux/macOS)"
         if: matrix.os != 'windows-latest'
         run: |
           make release
           mv build/battleship ${{ matrix.name }}
-
-      - name: "Build project"
-        if: matrix.os == 'windows-latest'
-        run: |
-          cmake --build build
-          mv build\battleship.exe ${{ matrix.name }}
 
       - name: "Calculate SHA-256 sum"
         id: hash
