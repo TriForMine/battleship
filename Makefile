@@ -1,9 +1,17 @@
+# Configurations
+
+PROGRAM_NAME = battleship
+PROGRAM_VERSION = v0.0.3
+
+# Do not to what comes after this line
+
 PROJDIR := $(realpath $(CURDIR))
 
 SOURCEDIR = $(PROJDIR)/src
 BUILDDIR := $(PROJDIR)/build
 
 CFLAGS  = -Wall -ansi -pedantic
+CFLAGS += -DPROGRAM_VERSION='"$(PROGRAM_VERSION)"'
 
 # Include all source files in subdirectories of SOURCEDIR
 SOURCEDIRS = $(shell find $(SOURCEDIR) -type d)
@@ -13,7 +21,7 @@ HEADERS =  $(foreach dir,$(SOURCEDIRS),$(wildcard $(dir)/*.h))
 # Generate a list of object files from the source files, with the directory name as a prefix
 OBJS = $(patsubst $(SOURCEDIR)/%.c,$(BUILDDIR)/%.o,$(SOURCES))
 
-TARGET	= ${BUILDDIR}/battleship
+TARGET	= ${BUILDDIR}/${PROGRAM_NAME}
 CC	 = gcc
 LFLAGS	 =
 

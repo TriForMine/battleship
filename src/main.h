@@ -8,6 +8,7 @@
 #include "utils/stdprof.h"
 #include "core/parser.h"
 #include "core/interactive.h"
+#include "utils/version.h"
 
 Game game;
 

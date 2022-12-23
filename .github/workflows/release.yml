@@ -24,38 +24,31 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: "Run CMake"
+      - name: "Build Project (Windows)"
         if: matrix.os == 'windows-latest'
-        run: cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
+        run: |
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
+          cmake --build build -- -j 2
+          mv build\battleship.exe ${{ matrix.name }}
 
-      - name: "Run Makefile"
+      - name: "Build Project (Linux/macOS)"
         if: matrix.os != 'windows-latest'
         run: |
           make release
           mv build/battleship ${{ matrix.name }}
-
-      - name: "Build project"
-        if: matrix.os == 'windows-latest'
-        run: |
-          cmake --build build
-          mv build\battleship.exe ${{ matrix.name }}
 
       - name: "Calculate SHA-256 sum"
         id: hash
         run:
           openssl dgst -sha256 -r ${{ matrix.name }} | awk '{print $1}' > "${{ matrix.name }}.sha256"
 
-      - name: "Release | Upload artifacts (sum)"
+      - name: "Release | Upload artifacts"
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.name }}.sha256
-          path: ${{ matrix.name }}.sha256
-
-      - name: "Release | Upload artifacts (binary)"
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.name }}
-          path: ${{ matrix.name }}
+          name: battleship
+          path: |
+            ${{ matrix.name }}.sha256
+            ${{ matrix.name }}
 
   upload_artifacts:
     name: Add Build Artifacts to Release
@@ -69,4 +62,4 @@ jobs:
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
-          files: battleship-*/battleship*
+          files: battleship/battleship*

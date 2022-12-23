@@ -29,14 +29,16 @@ jobs:
       - name: "Build Project (Windows)"
         if: matrix.os == 'windows-latest'
         run: |
-          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
+          short_sha=$(echo "${{GITHUB_SHA}}" | cut -c1-7)
+          cmake -G Ninja -DPROGRAM_VERSION=${short_sha} -DCMAKE_BUILD_TYPE=Release -S . -B build
           cmake --build build -- -j 2
           mv build\battleship.exe ${{ matrix.name }}
 
       - name: "Build Project (Linux/macOS)"
         if: matrix.os != 'windows-latest'
         run: |
-          make release
+          short_sha=$(echo "${{GITHUB_SHA}}" | cut -c1-7)
+          make PROGRAM_VERSION=${short_sha} release
           mv build/battleship ${{ matrix.name }}
 
       - name: "Calculate SHA-256 sum"
