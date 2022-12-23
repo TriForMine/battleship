@@ -12,7 +12,7 @@
 #define ERR_INVALID_TURN_PLAYER           (-9)
 #define ERR_CANNOT_PLACE_SHIP_AFTER_START (-10)
 #define ERR_INVALID_SHIP_DIRECTION        (-11)
-#define ERR_INVALID_MOVE_COMMAND          (-12)
+#define ERR_SUNK_SHIP                     (-12)
 #define ERR_INVALID_SHIP_PLACEMENT        (-13)
 #define ERR_UNKNOWN_COMMAND               (-14)
 #define ERR_OPENING_FILE                  (-15)

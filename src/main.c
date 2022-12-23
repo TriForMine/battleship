@@ -20,8 +20,10 @@ int main(int argc, char* argv[]) {
     if (help) {
         printf("Usage: battleship [-h] [-i] [file]");
     } else if (interactive) {
-        printf("Battleship v1.0\n");
-        printf("Written by: Quentin Nicolini and Samy Ben dhiab\n");
+        printf("Battleship v0.0.2\n");
+        printf("Written by: Quentin Nicolini and Samy Ben dhiab\n\n");
+
+        handleInteractiveGame();
     } else if (filename != NULL) {
         parseFile(filename);
     } else {

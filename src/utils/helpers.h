@@ -4,5 +4,6 @@
 #include "types.h"
 
 Coordinate createCoordinate(unsigned int x, unsigned int y);
+void clearConsole(void);
 
 #endif

@@ -1,8 +1,6 @@
 #include "parser.h"
 
-#define BUFFER_SIZE     256
-#define MAX_LENGTH_NAME 100
-#define SHOW_ONE_BOARD  true
+#define SHOW_ONE_BOARD true
 
 void parseSTDIN(void) {
     Game* game = NULL;

@@ -22,6 +22,8 @@ typedef enum { Player1, Player2 } GameTurn;
 
 typedef enum { DISABLED, RANDOM, HUNT_TARGET_PARITY, MONTE_CARLO_TREE_SEARCH } AI_Mode;
 
+typedef enum { PLACING_SHIPS, PLAYING, ENDED } GameState;
+
 typedef struct {
     unsigned int x;
     unsigned int y;
@@ -61,6 +63,7 @@ typedef struct {
     unsigned int remaining_ships[2];
     unsigned int seed;
     AI_Mode ai_mode;
+    GameState state;
 } Game;
 
 #endif

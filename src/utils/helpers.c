@@ -6,3 +6,13 @@ Coordinate createCoordinate(unsigned int x, unsigned int y) {
     coord.y = y;
     return coord;
 }
+
+void clearConsole(void) {
+#if defined(_WIN32) || defined(_WIN64)
+    /* Windows */
+    system("cls");
+#else
+    /* Linux, Mac */
+    system("clear");
+#endif
+}

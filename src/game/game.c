@@ -6,6 +6,7 @@ Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int WIDTH, unsigne
     Game* game = malloc_prof(sizeof(Game));
     game->board1 = createBoard(WIDTH, HEIGHT);
     game->board2 = createBoard(WIDTH, HEIGHT);
+    game->state = PLACING_SHIPS;
     game->single_board = single_board;
     game->turn = Player1;
     game->remaining_ships[0] = 0;
@@ -22,12 +23,19 @@ Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int WIDTH, unsigne
 
 void printGame(Game* game) {
     if (game->single_board) {
-        printBoard(game->board1);
+        printBoard(game->board1, true);
     } else {
-        printf("Player 1:\n");
-        printBoard(game->board1);
-        printf("Player 2:\n");
-        printBoard(game->board2);
+        if (game->turn == Player1) {
+            printf("Player 1's turn\n");
+
+            printBoard(game->board1, true);
+            printBoard(game->board2, false);
+        } else {
+            printf("Player 2's turn\n");
+
+            printBoard(game->board2, true);
+            printBoard(game->board1, false);
+        }
     }
 }
 

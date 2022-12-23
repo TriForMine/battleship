@@ -7,6 +7,7 @@
 #include "game/board.h"
 #include "utils/stdprof.h"
 #include "core/parser.h"
+#include "core/interactive.h"
 
 Game game;
 

@@ -34,7 +34,7 @@ Ship* getShipWithName(Board* board, char* name);
 bool shipExists(Board* board, char* name);
 
 /* Printing */
-void printBoard(Board* board);
+void printBoard(Board* board, bool showShips);
 
 /* Movements */
 bool handleCollision(Board* board, Ship* ship, Coordinate position);

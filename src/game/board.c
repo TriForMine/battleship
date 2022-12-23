@@ -1,4 +1,5 @@
 #include "board.h"
+#include "ship.h"
 
 /* Board */
 Board* createBoard(unsigned int width, unsigned int height) {
@@ -140,7 +141,7 @@ Ship* getShipWithName(Board* board, char* name) { return dictionaryGet(board->sh
 bool shipExists(Board* board, char* name) { return getShipWithName(board, name) != NULL; }
 
 /* Printing */
-void printBoard(Board* board) {
+void printBoard(Board* board, bool showShips) {
     Ship* ship;
     Coordinate head;
     unsigned int x, y;
@@ -162,16 +163,24 @@ void printBoard(Board* board) {
                     head = ship->head;
 
                     if (ship->orientation == HORIZONTAL) {
-                        if (ship->hits >> (x - head.x) & 1) {
+                        if (ship->hits == (1 << ship->type) - 1) {
+                            printf(ANSI_COLOR_CYAN "□" ANSI_COLOR_RESET " ");
+                        } else if (ship->hits >> (x - head.x) & 1) {
                             printf(ANSI_COLOR_RED "□" ANSI_COLOR_RESET " ");
-                        } else {
+                        } else if (showShips) {
                             printf("■ ");
+                        } else {
+                            printf(ANSI_COLOR_BLUE "~ " ANSI_COLOR_RESET);
                         }
                     } else {
-                        if (ship->hits >> (y - head.y) & 1) {
+                        if (ship->hits == (1 << ship->type) - 1) {
+                            printf(ANSI_COLOR_CYAN "□" ANSI_COLOR_RESET " ");
+                        } else if (ship->hits >> (y - head.y) & 1) {
                             printf(ANSI_COLOR_RED "□" ANSI_COLOR_RESET " ");
-                        } else {
+                        } else if (showShips) {
                             printf("■ ");
+                        } else {
+                            printf(ANSI_COLOR_BLUE "~ " ANSI_COLOR_RESET);
                         }
                     }
 
@@ -193,6 +202,10 @@ void moveShip(Board* board, Ship* ship, Direction direction) {
     /* Save the original position of the ship*/
     Coordinate originalPos = ship->head;
     Coordinate newPos = ship->head;
+
+    if (isShipSunk(ship)) {
+        RAISE_ERROR(ERR_SUNK_SHIP);
+    }
 
     /* Update the position of the ship's head based on the direction*/
     switch (direction) {
@@ -235,11 +248,15 @@ bool handleCollision(Board* board, Ship* ship, Coordinate position) {
         current.y = position.y + (ship->orientation == VERTICAL ? i : 0);
 
         if (getTileState(board, current) == SHIP) {
-            collision = true;
+            Ship* otherShip = getShip(board, current);
+            if (otherShip != ship) {
+                collision = true;
+                ship->hits |= 1 << i;
+                otherShip->hits |= 1 << ((ship->orientation == HORIZONTAL) ? (current.x - otherShip->head.x)
+                                                                           : (current.y - otherShip->head.y));
+            }
+        } else if (getTileState(board, current) == MINE) {
             ship->hits |= 1 << i;
-            getShip(board, current)->hits |=
-                1 << ((ship->orientation == HORIZONTAL) ? (current.x - getShip(board, current)->head.x)
-                                                        : (current.y - getShip(board, current)->head.y));
         }
     }
 

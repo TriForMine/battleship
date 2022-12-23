@@ -13,7 +13,7 @@ const char* error_messages[] = {
     "Invalid turn player",
     "Cannot place ship after start",
     "Invalid ship direction",
-    "Invalid move command",
+    "Error the ship is sunk you cannot move it",
     "Invalid ship placement",
     "Unknown command",
     "Error opening file",
