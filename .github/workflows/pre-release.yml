@@ -50,6 +50,7 @@ jobs:
       - name: "Release | Upload artifacts"
         uses: actions/upload-artifact@v3
         with:
+          name: battleship
           path: |
             ${{ matrix.name }}.sha256
             ${{ matrix.name }}
@@ -68,4 +69,4 @@ jobs:
           automatic_release_tag: "latest"
           prerelease: true
           title: "Development Build"
-          files: battleship-*/battleship*
+          files: battleship/battleship*
