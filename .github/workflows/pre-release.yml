@@ -47,17 +47,12 @@ jobs:
         run:
           openssl dgst -sha256 -r ${{ matrix.name }} | awk '{print $1}' > "${{ matrix.name }}.sha256"
 
-      - name: "Release | Upload artifacts (sum)"
+      - name: "Release | Upload artifacts"
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.name }}.sha256
-          path: ${{ matrix.name }}.sha256
-
-      - name: "Release | Upload artifacts (binary)"
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.name }}
-          path: ${{ matrix.name }}
+          paths: |
+            ${{ matrix.name }}.sha256
+            ${{ matrix.name }}
 
   upload_artifacts:
     name: Add Build Artifacts to Release
