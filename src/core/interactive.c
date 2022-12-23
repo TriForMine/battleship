@@ -92,7 +92,7 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
             orientation = strtol(buffer, NULL, 10);
             printf("Please enter the coordinate of the %d ship (e.g. A1): ", shipLengths[i]);
             fgets(buffer, BUFFER_SIZE, stdin);
-            parseCoordinate(buffer, &coordinate);
+            parseCoordinate(buffer, &coordinate, shipLengths[i], orientation, WIDTH, HEIGHT);
             placeShip(getPlayerBoard(game, '1'), createShip(shipLengths[i], orientation), coordinate);
             clearConsole();
         }
@@ -193,7 +193,7 @@ bool parseLine(Game* game, char* line) {
     count = sscanf(line, "%10s %2s %c", command, str_coordinate, &param);
     board = getPlayerBoard(game, '1');
 
-    parseCoordinate(str_coordinate, &coordinate);
+    parseCoordinate(str_coordinate, &coordinate, 0, -1, game->board1->WIDTH, game->board1->HEIGHT);
 
     if (count == 3) {
         if (strcmp(command, "move") == 0) {
@@ -253,7 +253,8 @@ bool parseLine(Game* game, char* line) {
     return true;
 }
 
-void parseCoordinate(const char* str, Coordinate* coordinate) {
+void parseCoordinate(const char* str, Coordinate* coordinate, unsigned int size, const int orientation,
+                     unsigned int WIDTH, unsigned int HEIGHT) {
     char letter = str[0];
     if (letter >= 'a' && letter <= 'z') {
         letter -= 'a' - 'A';
@@ -262,4 +263,21 @@ void parseCoordinate(const char* str, Coordinate* coordinate) {
     }
     coordinate->x = strtol(str + 1, NULL, 10);
     coordinate->y = letter - 'A';
+
+    if (orientation == 0) {
+        if (coordinate->x + size > WIDTH) {
+            coordinate->x = WIDTH - size;
+        }
+    } else if (orientation == 1) {
+        if (coordinate->y + size > HEIGHT) {
+            coordinate->y = HEIGHT - size;
+        }
+    } else {
+        if (coordinate->x > WIDTH) {
+            coordinate->x = WIDTH - size;
+        }
+        if (coordinate->y > HEIGHT) {
+            coordinate->y = HEIGHT;
+        }
+    }
 }

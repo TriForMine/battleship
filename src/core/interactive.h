@@ -24,6 +24,7 @@ void performAiTurn(Game* game);
 bool parseLine(Game* game, char* line);
 
 /* Helpers */
-void parseCoordinate(const char* str, Coordinate* coordinate);
+void parseCoordinate(const char* str, Coordinate* coordinate, unsigned int size, const int orientation,
+                     unsigned int WIDTH, unsigned int HEIGHT);
 
 #endif /* BATTLESHIP_INTERACTIVE_H */
