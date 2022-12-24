@@ -30,6 +30,7 @@ bool isTileShip(Board* board, Coordinate coordinate);
 bool isTileUnknown(Board* board, Coordinate coordinate);
 bool isTileHit(Board* board, Coordinate coordinate);
 bool isTileFired(Board* board, Coordinate coordinate);
+bool isShipAlive(Board* board, Ship_Type ship_type);
 
 /* Ship Placements */
 void placeShip(Board* board, Ship* ship, Coordinate position);

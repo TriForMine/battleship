@@ -130,6 +130,24 @@ bool isTileFired(Board* board, Coordinate coordinate) {
     return isTileMine(board, coordinate) || isTileHit(board, coordinate);
 }
 
+bool isShipAlive(Board* board, Ship_Type ship_type) {
+    unsigned int x, y;
+
+    for (x = 0; x < board->WIDTH; ++x) {
+        for (y = 0; y < board->HEIGHT; ++y) {
+            Coordinate coordinate = createCoordinate(x, y);
+            Ship* ship = getShip(board, coordinate);
+            if (isTileShip(board, coordinate) && ship->type == ship_type && !isShipSunk(getShip(board, coordinate))) {
+                /* Ship is still alive */
+                return true;
+            }
+        }
+    }
+
+    /* Ship is not found or is sunk */
+    return false;
+}
+
 /* Ship Placements */
 void placeShip(Board* board, Ship* ship, Coordinate position) {
     unsigned int i;

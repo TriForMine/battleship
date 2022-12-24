@@ -134,18 +134,27 @@ unsigned int* calculateProbabilityDensity(Board* board) {
     unsigned int* probability_density =
         calloc_prof((unsigned long)board->WIDTH * (unsigned long)board->HEIGHT, sizeof(unsigned int));
 
+    bool carrier_alive = isShipAlive(board, CARRIER);
+    bool battleship_alive = isShipAlive(board, BATTLESHIP);
+    bool cruiser_alive = isShipAlive(board, CRUISER);
+    bool destroyer_alive = isShipAlive(board, DESTROYER);
+
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
             Coordinate coordinate = createCoordinate(x, y);
             if (isTileUnknown(board, coordinate)) {
-                probability_density[y * board->WIDTH + x] = getShipProbability(board, coordinate, CARRIER);
-                probability_density[y * board->WIDTH + x] += getShipProbability(board, coordinate, BATTLESHIP);
-
-                /* There is 2 cruisers in the game */
-                probability_density[y * board->WIDTH + x] += getShipProbability(board, coordinate, CRUISER);
-                probability_density[y * board->WIDTH + x] += getShipProbability(board, coordinate, CRUISER);
-
-                probability_density[y * board->WIDTH + x] += getShipProbability(board, coordinate, DESTROYER);
+                if (carrier_alive) {
+                    probability_density[y * board->WIDTH + x] += getShipProbability(board, coordinate, CARRIER);
+                }
+                if (battleship_alive) {
+                    probability_density[y * board->WIDTH + x] += getShipProbability(board, coordinate, BATTLESHIP);
+                }
+                if (cruiser_alive) {
+                    probability_density[y * board->WIDTH + x] += getShipProbability(board, coordinate, CRUISER);
+                }
+                if (destroyer_alive) {
+                    probability_density[y * board->WIDTH + x] += getShipProbability(board, coordinate, DESTROYER);
+                }
             }
         }
     }
