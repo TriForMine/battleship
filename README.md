@@ -111,6 +111,9 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
 cmake --build build
 ```
 
+To build the game with the debug mode, use `cmake -DDEBUG=1 -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build` instead.
+This will show a map of the probabilities for the probability targeting AI.
+
 4. Run the game:
 
 ```sh

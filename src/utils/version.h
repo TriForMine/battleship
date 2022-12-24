@@ -1,3 +1,3 @@
 #ifndef PROGRAM_VERSION
-#define PROGRAM_VERSION "not set"
+#define PROGRAM_VERSION "DEV"
 #endif
