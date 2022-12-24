@@ -40,7 +40,7 @@ bool isInTargetingMode(Board* board) {
         for (y = 0; y < board->HEIGHT; y++) {
             Coordinate coordinate = createCoordinate(x, y);
 
-            if (isTileHit(board, coordinate) == true) {
+            if (isTileHit(board, coordinate)) {
                 return true;
             }
         }
@@ -50,40 +50,62 @@ bool isInTargetingMode(Board* board) {
 
 /* Probability Calculation */
 
+/* Check if the placement is valid, and count hit if in targeting mode */
+bool checkPlacement(Board* board, unsigned int ship_length, bool targetMode, long fixed_coordinate,
+                    long variable_coordinate, char* hit_count, bool is_x_fixed) {
+    long i;
+    Coordinate current_coordinate;
+    bool is_valid = true;
+    (*hit_count) = 0;
+
+    for (i = 0; i < (long)ship_length; ++i) {
+        if (is_x_fixed) {
+            current_coordinate = createCoordinate(fixed_coordinate, variable_coordinate + i);
+        } else {
+            current_coordinate = createCoordinate(variable_coordinate + i, fixed_coordinate);
+        }
+
+        if (!isCoordinateValid(board, current_coordinate)) {
+            is_valid = false;
+            break;
+        }
+
+        if (isTileHit(board, current_coordinate)) {
+            (*hit_count)++;
+        }
+
+        if (!targetMode && !isTileUnknown(board, current_coordinate)) {
+            is_valid = false;
+            break;
+        }
+
+        if (targetMode
+            && (isTileMine(board, current_coordinate)
+                || (isTileShip(board, current_coordinate) && isShipSunk(getShip(board, current_coordinate))))) {
+            is_valid = false;
+            break;
+        }
+    }
+
+    return is_valid;
+}
+
 /* Calculates the probability density for a given ship at a given coordinate */
 unsigned int getShipProbability(Board* board, Coordinate coordinate, Ship_Type ship_type) {
     unsigned int probability = 0;
-    long x, x2, y, y2;
+    long x, y;
     unsigned int ship_length = getShipLength(ship_type);
     bool targetMode = isInTargetingMode(board);
 
     /* Check how many times it can be placed horizontally */
     for (x = (long)coordinate.x - (long)ship_length; x <= coordinate.x; ++x) {
-        Coordinate current_coordinate = createCoordinate(x, coordinate.y);
-        bool is_valid = true;
-        bool has_hit = false;
+        char hit_count = 0;
+        bool is_valid = checkPlacement(board, ship_length, targetMode, coordinate.y, x, &hit_count, false);
 
-        for (x2 = x; x2 < x + (long)ship_length; ++x2) {
-            current_coordinate.x = x2;
-
-            if (isCoordinateValid(board, current_coordinate) == false) {
-                is_valid = false;
-                break;
-            }
-
-            if (has_hit == false) {
-                has_hit = isTileHit(board, current_coordinate);
-            }
-            if (targetMode == false && isTileUnknown(board, current_coordinate) == false) {
-                is_valid = false;
-                break;
-            }
-        }
-
-        if (is_valid == true) {
-            if (targetMode == true && has_hit == true) {
-                probability++;
-            } else if (targetMode == false && has_hit == false) {
+        if (is_valid) {
+            if (targetMode && hit_count > 0) {
+                probability += hit_count;
+            } else if (!targetMode && hit_count == 0) {
                 probability++;
             }
         }
@@ -91,30 +113,13 @@ unsigned int getShipProbability(Board* board, Coordinate coordinate, Ship_Type s
 
     /* Check how many times it can be placed vertically */
     for (y = (long)coordinate.y - (long)ship_length; y <= coordinate.y; ++y) {
-        Coordinate current_coordinate = createCoordinate(coordinate.x, y);
-        bool is_valid = true;
-        bool has_hit = false;
+        char hit_count = 0;
+        bool is_valid = checkPlacement(board, ship_length, targetMode, coordinate.x, y, &hit_count, true);
 
-        for (y2 = y; y2 < y + (long)ship_length; ++y2) {
-            current_coordinate.y = y2;
-            if (isCoordinateValid(board, current_coordinate) == false) {
-                is_valid = false;
-                break;
-            }
-
-            if (has_hit == false) {
-                has_hit = isTileHit(board, current_coordinate);
-            }
-            if (targetMode == false && isTileUnknown(board, current_coordinate) == false) {
-                is_valid = false;
-                break;
-            }
-        }
-
-        if (is_valid == true) {
-            if (targetMode == true && has_hit == true) {
-                probability++;
-            } else if (targetMode == false && has_hit == false) {
+        if (is_valid) {
+            if (targetMode && hit_count > 0) {
+                probability += hit_count;
+            } else if (!targetMode && hit_count == 0) {
                 probability++;
             }
         }

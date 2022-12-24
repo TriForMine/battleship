@@ -25,6 +25,8 @@ void getNearbyCoordinates(Board* board, Coordinate current, Coordinate* list, un
 
 /* Checks */
 bool isCoordinateValid(Board* board, Coordinate coordinate);
+bool isTileMine(Board* board, Coordinate coordinate);
+bool isTileShip(Board* board, Coordinate coordinate);
 bool isTileUnknown(Board* board, Coordinate coordinate);
 bool isTileHit(Board* board, Coordinate coordinate);
 bool isTileFired(Board* board, Coordinate coordinate);

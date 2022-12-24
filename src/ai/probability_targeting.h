@@ -12,6 +12,8 @@ void playProbabilityTargetingAI(Game* game);
 bool isInTargetingMode(Board* board);
 
 /* Probability Calculation */
+bool checkPlacement(Board* board, unsigned int ship_length, bool targetMode, long fixed_coordinate,
+                    long variable_coordinate, char* hit_count, bool is_x_fixed);
 unsigned int getShipProbability(Board* board, Coordinate coordinate, Ship_Type ship_type);
 unsigned int* calculateProbabilityDensity(Board* board);
 

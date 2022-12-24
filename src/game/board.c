@@ -106,6 +106,16 @@ bool isCoordinateValid(Board* board, Coordinate coordinate) {
     return coordinate.x < board->WIDTH && coordinate.y < board->HEIGHT;
 }
 
+bool isTileMine(Board* board, Coordinate coordinate) {
+    State state = getTileState(board, coordinate);
+    return state == MINE;
+}
+
+bool isTileShip(Board* board, Coordinate coordinate) {
+    State state = getTileState(board, coordinate);
+    return state == SHIP;
+}
+
 bool isTileUnknown(Board* board, Coordinate coordinate) {
     State state = getTileState(board, coordinate);
     return state == WATER || (state == SHIP && isShipHitAtCoordinate(getShip(board, coordinate), coordinate) == false);
@@ -117,8 +127,7 @@ bool isTileHit(Board* board, Coordinate coordinate) {
 }
 
 bool isTileFired(Board* board, Coordinate coordinate) {
-    State state = getTileState(board, coordinate);
-    return state == MINE || isTileHit(board, coordinate);
+    return isTileMine(board, coordinate) || isTileHit(board, coordinate);
 }
 
 /* Ship Placements */
