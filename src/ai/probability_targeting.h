@@ -6,6 +6,15 @@
 #include "../utils/helpers.h"
 #include <math.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#include <stdint.h>
+#else
+
+#include <pthread.h>
+
+#endif
+
 /* Main */
 void playProbabilityTargetingAI(Game *game);
 
@@ -20,14 +29,6 @@ DWORD WINAPI calcProbability(LPVOID lpParam);
 #else
 
 void *calcProbability(void *args);
-
-#endif
-
-#ifdef _WIN32
-DWORD WINAPI calcProbabilityQuadrant(LPVOID lpParam);
-#else
-
-void *calcProbabilityQuadrant(void *args);
 
 #endif
 

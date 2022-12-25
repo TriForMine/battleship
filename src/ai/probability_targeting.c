@@ -1,13 +1,5 @@
 #include "probability_targeting.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-
-#include <pthread.h>
-
-#endif
-
 /* Main */
 void playProbabilityTargetingAI(Game *game) {
     Coordinate coordinate = getProbabilityTarget(game);
@@ -93,9 +85,8 @@ void *calcProbability(void *args) {
 #endif
     board = calc_args->board;
     ship_type = calc_args->ship_type;
-    probability_density = (unsigned int *) malloc(
-            (unsigned long) board->WIDTH * (unsigned long) board->HEIGHT * sizeof(unsigned int));
-    memset(probability_density, 0, (unsigned long) board->WIDTH * (unsigned long) board->HEIGHT * sizeof(unsigned int));
+    probability_density = (unsigned int *) calloc((unsigned long) board->WIDTH * (unsigned long) board->HEIGHT,
+                                                  sizeof(unsigned int));
 
     for (y = 0; y < board->HEIGHT; ++y) {
         for (x = 0; x < board->WIDTH; ++x) {
@@ -107,7 +98,12 @@ void *calcProbability(void *args) {
         }
     }
 
+#ifdef _WIN32
+    printf("Thread finished with adress %p\n", (uintptr_t) probability_density);
+    return (uintptr_t) probability_density;
+#else
     return probability_density;
+#endif
 }
 
 /* Probability Calculation */
@@ -191,7 +187,7 @@ unsigned int getShipProbability(Board *board, Coordinate coordinate, Ship_Type s
 
 /* Calculates the probability density for all ships */
 unsigned int *calculateProbabilityDensity(Board *board) {
-#ifndef DISABLE_MULTITHREADING
+#if !defined DISABLE_MULTITHREADING && !defined _WIN32
     int i;
     unsigned int j;
 #ifdef _WIN32
@@ -214,7 +210,7 @@ unsigned int *calculateProbabilityDensity(Board *board) {
     ships_alive[1] = isShipAlive(board, CRUISER);
     ships_alive[0] = isShipAlive(board, DESTROYER);
 
-#ifndef DISABLE_MULTITHREADING
+#if !defined DISABLE_MULTITHREADING && !defined _WIN32
     /* Set up arguments for each thread */
     for (i = 0; i < 4; i++) {
         if (ships_alive[i] == true) {
@@ -238,16 +234,25 @@ unsigned int *calculateProbabilityDensity(Board *board) {
     /* Wait for all threads to finish and sum the results */
     for (i = 0; i < 4; i++) {
         if (ships_alive[i]) {
-            void *thread_result;
             unsigned int *thread_probability_density;
 #ifdef _WIN32
+            DWORD thread_result = 0;
             WaitForSingleObject(threads[i], INFINITE);
-            GetExitCodeThread(threads[i], (LPDWORD)&thread_result);
+            GetExitCodeThread(threads[i], (LPDWORD) &thread_result);
+            printf("Thread %d finished with adress %p\n", i, thread_result);
+            thread_probability_density = (unsigned int *) (uintptr_t) thread_result;
+            printf("Thread %d finished with adress %p (2)\n", i, thread_probability_density);
+            for (j = 0; j < board->WIDTH * board->HEIGHT; j++) {
+                printf("value: ");
+                printf("%d ", thread_probability_density[j]);
+            }
 #else
+            void *thread_result;
             pthread_join(threads[i], &thread_result);
+            thread_probability_density = (unsigned int *) thread_result;
 #endif
 
-            thread_probability_density = (unsigned int *) thread_result;
+
             for (j = 0; j < board->WIDTH * board->HEIGHT; j++) {
                 probability_density[j] += thread_probability_density[j];
             }
