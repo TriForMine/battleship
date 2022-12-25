@@ -56,6 +56,26 @@ void* dictionaryGet(Dictionary* dictionary, char* key) {
     return NULL;
 }
 
+/* Reset a dictionary to its initial state */
+void clearDictionary(Dictionary* dictionary) {
+    size_t i;
+    DictionaryEntry* entry;
+    DictionaryEntry* next;
+
+    /* Free all the entries in the dictionary */
+    for (i = 0; i < dictionary->capacity; i++) {
+        entry = dictionary->entries[i];
+        while (entry != NULL) {
+            next = entry->next;
+            free(entry->key);
+            free(entry);
+            entry = next;
+        }
+        dictionary->entries[i] = NULL;
+    }
+    dictionary->size = 0;
+}
+
 /*Free the memory used by the dictionary*/
 void freeDictionary(Dictionary* dictionary) {
     size_t i;

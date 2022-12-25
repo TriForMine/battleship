@@ -5,6 +5,7 @@ int main(int argc, char* argv[]) {
     bool help = false;
     bool interactive = false;
     char* filename = NULL;
+    long benchmark = 0;
 
     /* Skip argv[0] (program name). */
     for (i = 1; i < argc; i++) {
@@ -14,6 +15,8 @@ int main(int argc, char* argv[]) {
             interactive = true;
         } else if ((strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--file") == 0) && i + 1 < argc) {
             filename = argv[i + 1];
+        } else if ((strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--benchmark") == 0) && i + 1 < argc) {
+            benchmark = strtol(argv[i + 1], NULL, 10);
         }
     }
 
@@ -23,6 +26,8 @@ int main(int argc, char* argv[]) {
         handleInteractiveGame();
     } else if (filename != NULL) {
         parseFile(filename);
+    } else if (benchmark > 0) {
+        startBenchmark(benchmark);
     } else {
         parseSTDIN();
     }

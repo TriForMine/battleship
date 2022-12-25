@@ -7,26 +7,36 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
     int i;
     char buffer[BUFFER_SIZE];
 
-    AI_Mode ai_mode = DISABLED;
-    unsigned int WIDTH = 10;
-    unsigned int HEIGHT = 10;
+    AI_Mode ai_mode;
+    unsigned int WIDTH;
+    unsigned int HEIGHT;
     unsigned int seed = generate_random_seed();
     Coordinate coordinate;
     Orientation orientation;
 
     printf("Please enter the ");
     PRINT_BLUE_TEXT("width");
-    printf(" of the board: ");
+    printf(" of the board ");
+    PRINT_YELLOW_TEXT("(10)");
+    printf(": ");
 
-    fgets(buffer, BUFFER_SIZE, stdin);
-    WIDTH = strtol(buffer, NULL, 10);
+    if (fgets(buffer, BUFFER_SIZE, stdin) != NULL && strcmp(buffer, "\n") != 0) {
+        WIDTH = strtol(buffer, NULL, 10);
+    } else {
+        WIDTH = 10;
+    }
 
     printf("Please enter the ");
     PRINT_BLUE_TEXT("height");
-    printf(" of the board: ");
+    printf(" of the board ");
+    PRINT_YELLOW_TEXT("(10)");
+    printf(": ");
 
-    fgets(buffer, BUFFER_SIZE, stdin);
-    HEIGHT = strtol(buffer, NULL, 10);
+    if (fgets(buffer, BUFFER_SIZE, stdin) != NULL && strcmp(buffer, "\n") != 0) {
+        HEIGHT = strtol(buffer, NULL, 10);
+    } else {
+        HEIGHT = 10;
+    }
 
     printf("Please enter the ");
 
@@ -47,18 +57,20 @@ Game* startGame(int shipLengths[], int shipLengthsLengths) {
     printf(" = hunt and target, ");
     PRINT_YELLOW_TEXT("3");
 
-    printf(" = probability targeting): ");
+    printf(" = probability targeting) ");
+    PRINT_YELLOW_TEXT("(3)");
+    printf(": ");
 
-    fgets(buffer, BUFFER_SIZE, stdin);
-    ai_mode = strtol(buffer, NULL, 10);
-    if (ai_mode > 3) {
-        ai_mode = DISABLED;
+    if (fgets(buffer, BUFFER_SIZE, stdin) != NULL && strcmp(buffer, "\n") != 0) {
+        ai_mode = strtol(buffer, NULL, 10);
+    } else {
+        ai_mode = PROBABILITY_TARGETING;
     }
 
     if (ai_mode != DISABLED) {
         printf("\nGame will be played against the");
         SET_BLUE_TEXT();
-        printf(" %s ", ai_mode == RANDOM ? "random" : ai_mode == HUNT_TARGET ? "hunt and target" : "MCTF");
+        printf(" %s ", ai_mode == RANDOM ? "random" : ai_mode == HUNT_TARGET ? "hunt and target" : "probability targeting");
         RESET_TEXT_COLOR();
         printf("AI.\n");
 
@@ -131,8 +143,7 @@ void handleInteractiveGame(void) {
 
     printf("Written by: Quentin Nicolini and Samy Ben dhiab\n\n");
     game = startGame(shipLengths, shipLengthsLengths);
-    game->remaining_ships[0] = 5;
-    game->remaining_ships[1] = 5;
+
     printCurrentGame(game);
     while (game->state != ENDED && fgets(buffer, BUFFER_SIZE, stdin) != NULL) {
         if (false == parseLine(game, buffer)) {
@@ -185,12 +196,12 @@ void performAiTurn(Game* game) {
 bool parseLine(Game* game, char* line) {
     int count;
     Coordinate coordinate;
-    char str_coordinate[3];
+    char str_coordinate[4];
     char param;
     Ship* ship;
     Board* board;
     char command[11];
-    count = sscanf(line, "%10s %2s %c", command, str_coordinate, &param);
+    count = sscanf(line, "%10s %3s %c", command, str_coordinate, &param);
     board = getPlayerBoard(game, '1');
 
     parseCoordinate(str_coordinate, &coordinate, 0, -1, game->board1->WIDTH, game->board1->HEIGHT);
@@ -238,7 +249,7 @@ bool parseLine(Game* game, char* line) {
         }
     } else if (count == 1) {
         if (strcmp(command, "reset") == 0) {
-            resetGame(game);
+            resetGame(game, generate_random_seed());
         } else if (strcmp(command, "exit") == 0) {
             game->state = ENDED;
         } else {

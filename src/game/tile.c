@@ -20,9 +20,9 @@ void removeTileShip(Tile* tile) {
     tile->ship = NULL;
 }
 
-void resetTile(Tile* tile) {
-    if (tile->state == SHIP) {
-        tile->ship = NULL;
+void resetTile(Board* board, Tile* tile) {
+    if (tile->ship != NULL) {
+        freeShip(board, tile->ship);
     }
     tile->state = WATER;
 }
