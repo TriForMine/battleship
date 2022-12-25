@@ -47,7 +47,7 @@ void startBenchmark(unsigned int num_games) {
 BenchmarkResult benchmarkStrategy(Game *game, Coordinate (*getTargetCoordinate)(Game *), unsigned int num_games) {
     int shipLengths[] = {5, 4, 3, 3, 2};
     int shipLengthsLengths = 5;
-    unsigned int i;
+    unsigned int i, j, percentage;
     unsigned int moves = 0;
     unsigned int min_move = 0;
     unsigned int max_move = 0;
@@ -66,11 +66,21 @@ BenchmarkResult benchmarkStrategy(Game *game, Coordinate (*getTargetCoordinate)(
     /* Play the specified number of games */
     for (i = 0; i < num_games; i++) {
         unsigned int game_move;
-        if (num_games > 10 && i % (num_games / 10) == 0) {
+        int step;
+        step = 25;/*100 = 1%   50=2%   25=4%   10=10%*/
+        if (i % (num_games / step) == 0) {
             clearConsole();
-            /* TODO: use a progress bar instead of % */
-            printf("%d%%\n", i / (num_games / 100));
+            percentage = i / (num_games / 100);
+            printf("[");
+            for (j = 0; j < percentage; j++) {
+                printf("#");
+            }
+            for (j = percentage; j < 100; j++) {
+                printf("-");
+            }
+            printf("] %d%%\n", percentage);
         }
+
 
         game_move = playGame(game, getTargetCoordinate);
 
