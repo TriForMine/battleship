@@ -1,7 +1,7 @@
 # Configurations
 
 PROGRAM_NAME = battleship
-PROGRAM_VERSION = v0.0.3
+PROGRAM_VERSION = v0.0.8
 
 # Do not to what comes after this line
 
