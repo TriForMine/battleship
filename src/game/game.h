@@ -12,7 +12,7 @@
 /* Game */
 Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int SEED, unsigned int WIDTH, unsigned int HEIGHT);
 void printGame(Game* game);
-void resetGame(Game* game);
+void resetGame(Game* game, unsigned int seed);
 void freeGame(Game* game);
 
 /* Victory */

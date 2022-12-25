@@ -1,11 +1,7 @@
 #include "hunt_target.h"
 
 void playHuntTargetAI(Game* game) {
-    Coordinate coordinate;
-    Board* board = getOtherPlayerBoard(game);
-    do {
-        coordinate = getNextTarget(board);
-    } while (game->state == PLAYING && getTileState(board, coordinate) == MINE);
+    Coordinate coordinate = getHuntTargetCoordinate(game);
     fire(game, coordinate);
 }
 
@@ -30,9 +26,7 @@ void getTargetList(Board* board, Coordinate* result, int* size) {
             }
         }
     }
-
-    printf("Found %d possible targets\n", k);
-
+    
     *size = k;
 }
 
@@ -114,4 +108,14 @@ Coordinate getNextTarget(Board* board) {
     free_prof(targetList);
 
     return result;
+}
+
+Coordinate getHuntTargetCoordinate(Game* game) {
+    Coordinate coordinate;
+    Board* board = getOtherPlayerBoard(game);
+    do {
+        coordinate = getNextTarget(board);
+    } while (game->state == PLAYING && getTileState(board, coordinate) == MINE);
+
+    return coordinate;
 }

@@ -2,15 +2,15 @@
 #include "board.h"
 
 /* Game */
-Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int SEED, unsigned int WIDTH, unsigned int HEIGHT) {
-    Game* game = malloc_prof(sizeof(Game));
+Game *createGame(bool single_board, AI_Mode ai_mode, unsigned int SEED, unsigned int WIDTH, unsigned int HEIGHT) {
+    Game *game = malloc_prof(sizeof(Game));
     game->board1 = createBoard(WIDTH, HEIGHT);
     game->board2 = createBoard(WIDTH, HEIGHT);
     game->state = PLACING_SHIPS;
     game->single_board = single_board;
     game->turn = Player1;
-    game->remaining_ships[0] = 0;
-    game->remaining_ships[1] = 0;
+    game->remaining_ships[0] = 5;
+    game->remaining_ships[1] = 5;
     game->seed = SEED;
 
     /* Initialize the random number generator. */
@@ -20,7 +20,13 @@ Game* createGame(bool single_board, AI_Mode ai_mode, unsigned int SEED, unsigned
     return game;
 }
 
-void printGame(Game* game) {
+void printGame(Game *game) {
+    unsigned int x, y, i;
+    const int UPPERCASE_A = 'A';
+
+    const char *PLAYER1 = "Player 1";
+    const char *PLAYER2 = "Player 2";
+
     if (game->single_board) {
         printBoard(game->board1, true);
     } else {
@@ -40,13 +46,17 @@ void printGame(Game* game) {
     }
 }
 
-void resetGame(Game* game) {
+void resetGame(Game *game, unsigned int seed) {
     game->turn = Player1;
-    game->remaining_ships[0] = 0;
-    game->remaining_ships[1] = 0;
+    game->remaining_ships[0] = 5;
+    game->remaining_ships[1] = 5;
+    game->seed = seed;
+
+    resetBoard(game->board1);
+    resetBoard(game->board2);
 }
 
-void freeGame(Game* game) {
+void freeGame(Game *game) {
     if (game->board1 != NULL) {
         freeBoard(game->board1);
         game->board1 = NULL;
@@ -61,34 +71,34 @@ void freeGame(Game* game) {
 }
 
 /* Victory */
-bool checkVictory(Game* game) { return game->remaining_ships[0] == 0 || game->remaining_ships[1] == 0; }
+bool checkVictory(Game *game) { return game->remaining_ships[0] == 0 || game->remaining_ships[1] == 0; }
 
 /* Turn Management */
 
-void setGameTurn(Game* game, GameTurn turn) { game->turn = turn; }
+void setGameTurn(Game *game, GameTurn turn) { game->turn = turn; }
 
-void setGameTurnToPlayer1(Game* game) { setGameTurn(game, Player1); }
+void setGameTurnToPlayer1(Game *game) { setGameTurn(game, Player1); }
 
-void setGameTurnToPlayer2(Game* game) { setGameTurn(game, Player2); }
+void setGameTurnToPlayer2(Game *game) { setGameTurn(game, Player2); }
 
-void setGameTurnToOpponent(Game* game) { setGameTurn(game, game->turn == Player1 ? Player2 : Player1); }
+void setGameTurnToOpponent(Game *game) { setGameTurn(game, game->turn == Player1 ? Player2 : Player1); }
 
-Board* getCurrentPlayerBoard(Game* game) {
+Board *getCurrentPlayerBoard(Game *game) {
     return game->single_board || game->turn == Player1 ? game->board1 : game->board2;
 }
 
-Board* getOtherPlayerBoard(Game* game) {
+Board *getOtherPlayerBoard(Game *game) {
     return game->single_board || game->turn == Player2 ? game->board1 : game->board2;
 }
 
-Board* getPlayerBoard(Game* game, char player) {
+Board *getPlayerBoard(Game *game, char player) {
     return game->single_board == true || player == '1' ? game->board1 : game->board2;
 }
 
 /* Actions */
-void fire(Game* game, Coordinate coordinate) {
-    Ship* ship;
-    Board* board = getOtherPlayerBoard(game);
+void fire(Game *game, Coordinate coordinate) {
+    Ship *ship;
+    Board *board = getOtherPlayerBoard(game);
 
     if (!isCoordinateValid(board, coordinate)) {
         RAISE_ERROR(ERR_INVALID_COORDINATES);
@@ -101,26 +111,26 @@ void fire(Game* game, Coordinate coordinate) {
 
     if (ship != NULL) {
         if (isShipSunk(ship)) {
-            game->remaining_ships[game->turn == Player1 ? 0 : 1]--;
+            game->remaining_ships[game->single_board == true || game->turn == Player1 ? 0 : 1]--;
         }
     }
 }
 
-void move(Game* game, Ship* ship, Direction direction) {
-    Board* board = getCurrentPlayerBoard(game);
+void move(Game *game, Ship *ship, Direction direction) {
+    Board *board = getCurrentPlayerBoard(game);
     moveShip(board, ship, direction);
     setGameTurnToOpponent(game);
 
     if (ship != NULL) {
         if (isShipSunk(ship)) {
-            game->remaining_ships[game->turn == Player1 ? 0 : 1]--;
+            game->remaining_ships[game->single_board == true || game->turn == Player1 ? 0 : 1]--;
         }
     }
 }
 
-void moveUp(Game* game, Coordinate position) {
-    Board* board = getCurrentPlayerBoard(game);
-    Ship* ship = getShip(board, position);
+void moveUp(Game *game, Coordinate position) {
+    Board *board = getCurrentPlayerBoard(game);
+    Ship *ship = getShip(board, position);
 
     if (ship != NULL) {
         if (position.y > 0) {
@@ -129,9 +139,9 @@ void moveUp(Game* game, Coordinate position) {
     }
 }
 
-void moveDown(Game* game, Coordinate position) {
-    Board* board = getCurrentPlayerBoard(game);
-    Ship* ship = getShip(board, position);
+void moveDown(Game *game, Coordinate position) {
+    Board *board = getCurrentPlayerBoard(game);
+    Ship *ship = getShip(board, position);
 
     if (ship != NULL) {
         if (position.y < board->HEIGHT - 1) {
@@ -140,9 +150,9 @@ void moveDown(Game* game, Coordinate position) {
     }
 }
 
-void moveLeft(Game* game, Coordinate position) {
-    Board* board = getCurrentPlayerBoard(game);
-    Ship* ship = getShip(board, position);
+void moveLeft(Game *game, Coordinate position) {
+    Board *board = getCurrentPlayerBoard(game);
+    Ship *ship = getShip(board, position);
 
     if (ship != NULL) {
         if (position.x > 0) {
@@ -151,9 +161,9 @@ void moveLeft(Game* game, Coordinate position) {
     }
 }
 
-void moveRight(Game* game, Coordinate position) {
-    Board* board = getCurrentPlayerBoard(game);
-    Ship* ship = getShip(board, position);
+void moveRight(Game *game, Coordinate position) {
+    Board *board = getCurrentPlayerBoard(game);
+    Ship *ship = getShip(board, position);
 
     if (ship != NULL) {
         if (position.x < board->WIDTH - 1) {

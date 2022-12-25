@@ -32,6 +32,8 @@ unsigned int generate_random_seed(void) {
         perror("Error: read");
         close(fd);
     }
+
+    close(fd);
 #endif
     return seed;
 }

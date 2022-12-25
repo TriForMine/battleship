@@ -30,6 +30,9 @@ void dictionarySet(Dictionary* dictionary, char* key, void* value);
 /* Look up a value by its key in the dictionary */
 void* dictionaryGet(Dictionary* dictionary, char* key);
 
+/* Reset a dictionary to its initial state */
+void clearDictionary(Dictionary* dictionary);
+
 /*Free the memory used by the dictionary*/
 void freeDictionary(Dictionary* dictionary);
 

@@ -24,9 +24,11 @@ void resetBoard(Board* board) {
 
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
-            resetTile(getTile(board, createCoordinate(x, y)));
+            resetTile(board, getTile(board, createCoordinate(x, y)));
         }
     }
+
+    clearDictionary(board->ships_by_name);
 }
 
 void freeBoard(Board* board) {
@@ -203,6 +205,7 @@ Ship* getShipWithName(Board* board, char* name) { return dictionaryGet(board->sh
 void printBoard(Board* board, bool showShips) {
     Ship* ship;
 
+
     /* Constants for ASCII character codes*/
     const int UPPERCASE_A = 'A';
     const int SPACE = ' ';
@@ -343,6 +346,7 @@ void fireAt(Board* board, Coordinate position) {
     }
 
     if (getTileState(board, position) == MINE) {
+        printf("You already fired at this position! (%u, %u)\n", position.x, position.y);
         RAISE_ERROR(ERR_COORDINATE_ALREADY_HIT);
     }
 

@@ -7,7 +7,7 @@ void initTile(Tile* tile);
 void setTileState(Tile* tile, State state);
 void setTileShip(Tile* tile, Ship* ship);
 void removeTileShip(Tile* tile);
-void resetTile(Tile* tile);
+void resetTile(Board* board, Tile* tile);
 void freeTile(Board* board, Tile* tile);
 
 #endif
