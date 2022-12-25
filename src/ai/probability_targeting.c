@@ -93,8 +93,9 @@ void *calcProbability(void *args) {
 #endif
     board = calc_args->board;
     ship_type = calc_args->ship_type;
-    probability_density = (unsigned int *) malloc(board->WIDTH * board->HEIGHT * sizeof(unsigned int));
-    memset(probability_density, 0, board->WIDTH * board->HEIGHT * sizeof(unsigned int));
+    probability_density = (unsigned int *) malloc(
+            (unsigned long) board->WIDTH * (unsigned long) board->HEIGHT * sizeof(unsigned int));
+    memset(probability_density, 0, (unsigned long) board->WIDTH * (unsigned long) board->HEIGHT * sizeof(unsigned int));
 
     for (y = 0; y < board->HEIGHT; ++y) {
         for (x = 0; x < board->WIDTH; ++x) {
@@ -204,8 +205,9 @@ unsigned int *calculateProbabilityDensity(Board *board) {
 #endif
     bool ships_alive[4];
     bool isTargetingMode = isInTargetingMode(board);
-    unsigned int *probability_density = (unsigned int *) malloc(board->WIDTH * board->HEIGHT * sizeof(unsigned int));
-    memset(probability_density, 0, board->WIDTH * board->HEIGHT * sizeof(unsigned int));
+    unsigned int *probability_density = (unsigned int *) malloc(
+            (unsigned long) board->WIDTH * (unsigned long) board->HEIGHT * sizeof(unsigned int));
+    memset(probability_density, 0, (unsigned long) board->WIDTH * (unsigned long) board->HEIGHT * sizeof(unsigned int));
 
     ships_alive[3] = isShipAlive(board, CARRIER);
     ships_alive[2] = isShipAlive(board, BATTLESHIP);
