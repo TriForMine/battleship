@@ -2,14 +2,14 @@
 #include "ship.h"
 
 /* Board */
-Board* createBoard(unsigned int width, unsigned int height) {
-    Board* board = malloc_prof(sizeof(Board));
+Board *createBoard(unsigned int width, unsigned int height) {
+    Board *board = malloc_prof(sizeof(Board));
     unsigned int x, y;
 
     board->WIDTH = width;
     board->HEIGHT = height;
     board->tiles = malloc_prof(sizeof(Tile) * board->WIDTH * board->HEIGHT);
-    board->ships_by_name = createDictionary((unsigned long)board->WIDTH * (unsigned long)board->HEIGHT);
+    board->ships_by_name = createDictionary((unsigned long) board->WIDTH * (unsigned long) board->HEIGHT);
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
             initTile(getTile(board, createCoordinate(x, y)));
@@ -19,7 +19,7 @@ Board* createBoard(unsigned int width, unsigned int height) {
     return board;
 }
 
-void resetBoard(Board* board) {
+void resetBoard(Board *board) {
     unsigned int x, y;
 
     for (x = 0; x < board->WIDTH; ++x) {
@@ -31,7 +31,7 @@ void resetBoard(Board* board) {
     clearDictionary(board->ships_by_name);
 }
 
-void freeBoard(Board* board) {
+void freeBoard(Board *board) {
     unsigned int x, y;
 
     for (x = 0; x < board->WIDTH; ++x) {
@@ -50,7 +50,7 @@ void freeBoard(Board* board) {
     free_prof(board);
 }
 
-void updateBoardShip(Board* board, Ship* ship, Coordinate oldPos) {
+void updateBoardShip(Board *board, Ship *ship, Coordinate oldPos) {
     unsigned int i;
 
     /* Remove the ship from the old position */
@@ -80,11 +80,11 @@ void updateBoardShip(Board* board, Ship* ship, Coordinate oldPos) {
     }
 }
 
-Tile* getTile(Board* board, Coordinate coordinate) { return &board->tiles[coordinate.x + coordinate.y * board->WIDTH]; }
+Tile *getTile(Board *board, Coordinate coordinate) { return &board->tiles[coordinate.x + coordinate.y * board->WIDTH]; }
 
-State getTileState(Board* board, Coordinate coordinate) { return getTile(board, coordinate)->state; }
+State getTileState(Board *board, Coordinate coordinate) { return getTile(board, coordinate)->state; }
 
-void getNearbyCoordinates(Board* board, Coordinate current, Coordinate* list, unsigned int* size) {
+void getNearbyCoordinates(Board *board, Coordinate current, Coordinate *list, unsigned int *size) {
     unsigned int i = 0;
 
     if (current.x > 0) {
@@ -104,41 +104,41 @@ void getNearbyCoordinates(Board* board, Coordinate current, Coordinate* list, un
 }
 
 /* Checks */
-bool isCoordinateValid(Board* board, Coordinate coordinate) {
+bool isCoordinateValid(Board *board, Coordinate coordinate) {
     return coordinate.x < board->WIDTH && coordinate.y < board->HEIGHT;
 }
 
-bool isTileMine(Board* board, Coordinate coordinate) {
+bool isTileMine(Board *board, Coordinate coordinate) {
     State state = getTileState(board, coordinate);
     return state == MINE;
 }
 
-bool isTileShip(Board* board, Coordinate coordinate) {
+bool isTileShip(Board *board, Coordinate coordinate) {
     State state = getTileState(board, coordinate);
     return state == SHIP;
 }
 
-bool isTileUnknown(Board* board, Coordinate coordinate) {
+bool isTileUnknown(Board *board, Coordinate coordinate) {
     State state = getTileState(board, coordinate);
     return state == WATER || (state == SHIP && isShipHitAtCoordinate(getShip(board, coordinate), coordinate) == false);
 }
 
-bool isTileHit(Board* board, Coordinate coordinate) {
-    Ship* ship = getShip(board, coordinate);
+bool isTileHit(Board *board, Coordinate coordinate) {
+    Ship *ship = getShip(board, coordinate);
     return ship != NULL && isShipHitAtCoordinate(ship, coordinate) && isShipSunk(ship) == false;
 }
 
-bool isTileFired(Board* board, Coordinate coordinate) {
+bool isTileFired(Board *board, Coordinate coordinate) {
     return isTileMine(board, coordinate) || isTileHit(board, coordinate);
 }
 
-bool isShipAlive(Board* board, Ship_Type ship_type) {
+bool isShipAlive(Board *board, Ship_Type ship_type) {
     unsigned int x, y;
 
     for (x = 0; x < board->WIDTH; ++x) {
         for (y = 0; y < board->HEIGHT; ++y) {
             Coordinate coordinate = createCoordinate(x, y);
-            Ship* ship = getShip(board, coordinate);
+            Ship *ship = getShip(board, coordinate);
             if (isTileShip(board, coordinate) && ship->type == ship_type && !isShipSunk(getShip(board, coordinate))) {
                 /* Ship is still alive */
                 return true;
@@ -151,7 +151,7 @@ bool isShipAlive(Board* board, Ship_Type ship_type) {
 }
 
 /* Ship Placements */
-void placeShip(Board* board, Ship* ship, Coordinate position) {
+void placeShip(Board *board, Ship *ship, Coordinate position) {
     unsigned int i;
     Coordinate current;
 
@@ -194,16 +194,16 @@ void placeShip(Board* board, Ship* ship, Coordinate position) {
     ship->head = position;
 }
 
-void placeMine(Board* board, Coordinate position) { setTileState(getTile(board, position), MINE); }
+void placeMine(Board *board, Coordinate position) { setTileState(getTile(board, position), MINE); }
 
 /* Ship Getters */
-Ship* getShip(Board* board, Coordinate position) { return getTile(board, position)->ship; }
+Ship *getShip(Board *board, Coordinate position) { return getTile(board, position)->ship; }
 
-Ship* getShipWithName(Board* board, char* name) { return dictionaryGet(board->ships_by_name, name); }
+Ship *getShipWithName(Board *board, char *name) { return dictionaryGet(board->ships_by_name, name); }
 
 /* Printing */
-void printBoard(Board* board, bool showShips) {
-    Ship* ship;
+void printBoard(Board *board, bool showShips) {
+    Ship *ship;
 
 
     /* Constants for ASCII character codes*/
@@ -235,7 +235,7 @@ void printBoard(Board* board, bool showShips) {
             /* Print the appropriate character for the tile state*/
             switch (state) {
                 case WATER:
-                    PRINT_BLUE_TEXT("~ ");
+                PRINT_BLUE_TEXT("~ ");
                     break;
                 case SHIP:
                     /* Get the ship that occupies the tile*/
@@ -258,7 +258,7 @@ void printBoard(Board* board, bool showShips) {
                     }
                     break;
                 case MINE:
-                    PRINT_YELLOW_TEXT("⚠ ");
+                PRINT_YELLOW_TEXT("⚠ ");
                     break;
                 default:
                     /* Print two spaces for other tile states*/
@@ -270,8 +270,59 @@ void printBoard(Board* board, bool showShips) {
     }
 }
 
+void printBoardRow(Board *board, unsigned int y, bool showShips) {
+    Ship *ship;
+    const int SPACE = ' ';
+
+    /* Get the dimensions of the board*/
+    const unsigned int width = board->WIDTH;
+
+    unsigned int x;
+
+
+    for (x = 0; x < width; ++x) {
+        /* Get the state of the current tile*/
+        State state = board->tiles[x + y * width].state;
+
+        /* Print the appropriate character for the tile state*/
+        switch (state) {
+            case WATER:
+            PRINT_BLUE_TEXT("~  ");
+                break;
+            case SHIP:
+                /* Get the ship that occupies the tile*/
+                ship = getShip(board, createCoordinate(x, y));
+
+                /* Check if the ship has been completely sunk*/
+                if (ship->hits == (1 << ship->type) - 1) {
+                    PRINT_CYAN_TEXT("□  ");
+                } else {
+                    /* Check if the current tile has been hit*/
+                    if (isShipHitAtCoordinate(ship, createCoordinate(x, y))) {
+                        PRINT_RED_TEXT("□  ");
+                    } else if (showShips) {
+                        /* Print a square if the ship is not sunk and showShips is true*/
+                        printf("■  ");
+                    } else {
+                        /* Print water if the ship is not sunk and showShips is false*/
+                        PRINT_BLUE_TEXT("~  ");
+                    }
+                }
+                break;
+            case MINE:
+            PRINT_YELLOW_TEXT("⚠  ");
+                break;
+            default:
+                /* Print two spaces for other tile states*/
+                printf("%c%c%c", SPACE, SPACE, SPACE);
+                break;
+        }
+    }
+}
+
+
 /* Movements */
-void moveShip(Board* board, Ship* ship, Direction direction) {
+void moveShip(Board *board, Ship *ship, Direction direction) {
     /* Save the original position of the ship*/
     Coordinate originalPos = ship->head;
     Coordinate newPos = ship->head;
@@ -308,10 +359,12 @@ void moveShip(Board* board, Ship* ship, Direction direction) {
     updateBoardShip(board, ship, originalPos);
 }
 
+
+
 /* check if moving the whole ship to the new position will collide with an existing bot, if it does couts hits for both bot and don't move them
  * return true if the ship collides with another ship
  */
-bool handleCollision(Board* board, Ship* ship, Coordinate position) {
+bool handleCollision(Board *board, Ship *ship, Coordinate position) {
     unsigned int i;
     Coordinate current;
     bool collision = false;
@@ -321,7 +374,7 @@ bool handleCollision(Board* board, Ship* ship, Coordinate position) {
         current.y = position.y + (ship->orientation == VERTICAL ? i : 0);
 
         if (getTileState(board, current) == SHIP) {
-            Ship* otherShip = getShip(board, current);
+            Ship *otherShip = getShip(board, current);
             if (otherShip != ship) {
                 collision = true;
                 ship->hits |= 1 << i;
@@ -337,9 +390,9 @@ bool handleCollision(Board* board, Ship* ship, Coordinate position) {
 }
 
 /* Fire */
-void fireAt(Board* board, Coordinate position) {
+void fireAt(Board *board, Coordinate position) {
     Coordinate head;
-    Ship* ship;
+    Ship *ship;
 
     if (isCoordinateValid(board, position) == false) {
         RAISE_ERROR(ERR_INVALID_COORDINATES);
