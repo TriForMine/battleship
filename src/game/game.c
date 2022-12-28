@@ -72,13 +72,13 @@ void printGame(Game *game) {
             /* Print the row label*/
             printf("%c  ", UPPERCASE_A + y);
 
-            printBoardRow(game->board1, y, game->turn == Player1);
+            printBoardRow(game->board1, y, (game->state == ENDED || game->turn == Player1));
 
             printf("\t\t");
 
             printf("%c  ", UPPERCASE_A + y);
 
-            printBoardRow(game->board2, y, game->turn == Player2);
+            printBoardRow(game->board2, y, (game->state == ENDED || game->turn == Player2));
             printf("\n");
         }
     }
@@ -89,6 +89,7 @@ void resetGame(Game *game, unsigned int seed) {
     game->remaining_ships[0] = 5;
     game->remaining_ships[1] = 5;
     game->seed = seed;
+    game->state = PLACING_SHIPS;
 
     resetBoard(game->board1);
     resetBoard(game->board2);

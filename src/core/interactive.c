@@ -172,6 +172,7 @@ void handleInteractiveGame(void) {
         }
         printCurrentGame(game);
     }
+
     freeGame(game);
 }
 
