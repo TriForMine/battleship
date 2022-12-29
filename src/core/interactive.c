@@ -208,7 +208,8 @@ bool parseLine(Game* game, char* line) {
     parseCoordinate(str_coordinate, &coordinate, 0, -1, game->board1->WIDTH, game->board1->HEIGHT);
 
     if (count == 3) {
-        if (strcmp(command, "move") == 0) {
+        if (strcmp(command, "move") == 0 || strcmp(command, "Move") == 0 || strcmp(command, "MOVE") == 0 ||
+            strcmp(command, "m") == 0 || strcmp(command, "M") == 0) {
             ship = getShip(board, coordinate);
             if (isShipSunk(ship)) {
                 printf("You can't move a sunk ship!\n");
@@ -237,7 +238,8 @@ bool parseLine(Game* game, char* line) {
             return false;
         }
     } else if (count == 2) {
-        if (strcmp(command, "fire") == 0) {
+        if (strcmp(command, "fire") == 0 || strcmp(command, "Fire") == 0 || strcmp(command, "FIRE") == 0 ||
+            strcmp(command, "f") == 0 || strcmp(command, "F") == 0) {
             if (getTileState(getOtherPlayerBoard(game), coordinate) != MINE) {
                 fire(game, coordinate);
             } else {
