@@ -38,15 +38,16 @@ void printGame(Game *game) {
 
         if (game->turn == Player1) {
             SET_YELLOW_TEXT();
-        }
-        printf("%s", PLAYER1);
-        if (game->turn == Player1) {
+            printf("%s", PLAYER1);
             RESET_TEXT_COLOR();
+        } else {
+            printf("%s", PLAYER1);
         }
+
         for (i = 0; i < game->board1->WIDTH - strlen(PLAYER1) / 2 + 1; ++i) {
             printf(" ");
         }
-        printf("\t\t");
+        printf("\t\t\t\t");
 
         for (i = 0; i < game->board1->WIDTH - strlen(PLAYER2) / 2 + 1; ++i) {
             printf(" ");
@@ -54,27 +55,27 @@ void printGame(Game *game) {
 
         if (game->turn == Player2) {
             SET_YELLOW_TEXT();
-        }
-        printf("%s\n  ", PLAYER2);
-        if (game->turn == Player2) {
+            printf("%s\n  ", PLAYER2);
             RESET_TEXT_COLOR();
+        } else {
+            printf("%s\n  ", PLAYER2);
         }
 
         for (x = 0; x < game->board1->WIDTH; ++x) {
             printf("%2d ", x);
         }
-        printf("\t\t  ");
+        printf("\t\t");
         for (x = 0; x < game->board1->WIDTH; ++x) {
             printf("%2d ", x);
         }
         printf("\n");
         for (y = 0; y < game->board1->HEIGHT; ++y) {
-            /* Print the row label*/
+
             printf("%c  ", UPPERCASE_A + y);
 
             printBoardRow(game->board1, y, (game->state == ENDED || game->turn == Player1));
 
-            printf("\t\t");
+            printf("\t\t  ");
 
             printf("%c  ", UPPERCASE_A + y);
 
