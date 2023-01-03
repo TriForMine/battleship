@@ -86,8 +86,19 @@ probability targeting mode.
 
 4. Run the game:
 
+- Interactive Mode
 ```sh
-./build/battleship
+./build/battleship -i
+```
+
+- STDIN Format
+```sh
+cat test/format0.txt | ./build/battleship
+```
+
+- File Argument
+```sh
+./build/battleship -f test/format0.txt
 ```
 
 ### Option 2: Install using CMake and Ninja
@@ -116,8 +127,19 @@ This will show a map of the probabilities for the probability targeting AI.
 
 4. Run the game:
 
+- Interactive Mode
 ```sh
-./build/battleship
+./build/battleship -i
+```
+
+- STDIN Format
+```sh
+cat test/format0.txt | ./build/battleship
+```
+
+- File Argument
+```sh
+./build/battleship -f test/format0.txt
 ```
 
 ## Contributions
