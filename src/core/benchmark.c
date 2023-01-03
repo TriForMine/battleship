@@ -56,7 +56,7 @@ BenchmarkResult benchmarkStrategy(Game *game, Coordinate (*getTargetCoordinate)(
     double elapsed_time;
     BenchmarkResult result;
 
-    all_moves = malloc(sizeof(unsigned int) * num_games);
+    all_moves = malloc_prof(sizeof(unsigned int) * num_games);
 
     start_time = clock();
 
