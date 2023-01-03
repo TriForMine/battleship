@@ -67,8 +67,8 @@ void clearDictionary(Dictionary* dictionary) {
         entry = dictionary->entries[i];
         while (entry != NULL) {
             next = entry->next;
-            free(entry->key);
-            free(entry);
+            free_prof(entry->key);
+            free_prof(entry);
             entry = next;
         }
         dictionary->entries[i] = NULL;
