@@ -15,7 +15,7 @@ async fn main() {
         .init();
 
     let server = GameServer::new();
-    let listener = AsyncTcpListener::bind("127.0.0.1:1234").await.unwrap();
+    let listener = AsyncTcpListener::bind("0.0.0.0:1234").await.unwrap();
     info!("Server started on {}", listener.local_addr().unwrap());
 
     loop {

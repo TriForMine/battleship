@@ -166,10 +166,8 @@ Game *startOnlineGame(int *sockId, int *onlinePlayerId, int shipLengths[], int s
         port = 1234;
     }
 
-    printf("Connecting to server at %s:%d...\n", ip, port);
-
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htonl(port);
+    serv_addr.sin_port = htons(port);
     if (inet_pton(AF_INET, ip, &serv_addr.sin_addr) != 1) {
         perror("Error parsing IP address");
         socket_close(*sockId);
