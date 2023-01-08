@@ -3,7 +3,6 @@
 
 int main(void) {
     char message[4096];
-    char message2[4096];
     int sockfd = socket_create(AF_INET, SOCK_STREAM, 0);
 
     sockaddr_in serv_addr = {0};
@@ -22,20 +21,23 @@ int main(void) {
     socket_recv(sockfd, message, 4096, 0);
     printf("Message from server: %s\n", message);
 
-    if (strcmp(message, "Hello player 2") == 0) {
-        socket_recv(sockfd, message2, 4096, 0);
-        printf("Message from server: %s\n", message2);
-    } else if (strcmp(message, "Waiting for another player...") == 0) {
-        socket_recv(sockfd, message2, 4096, 0);
-        printf("Message from server: %s\n", message2);
-    } else {
-        printf("Enter message to send to server: ");
-        fgets(message, 4096, stdin);
-        socket_send(sockfd, message, strlen(message), 0);
-
-        socket_recv(sockfd, message2, 4096, 0);
-        printf("Message from server: %s\n", message2);
+    if (strcmp(message, "Waiting for another player...") == 0) {
+        printf("\nWaiting for another player...\n\n");
+        socket_recv(sockfd, message, 4096, 0);
+        printf("Message from server: %s\n", message);
+    } else if (strcmp(message, "You are connected to the server") == 0) {
+        printf("\nYou are connected to the server\n\n");
+        printf("Waiting for the other player to play ...\n\n");
+        socket_recv(sockfd, message, 4096, 0);
+        printf("Message from server: %s\n", message);
     }
+
+    printf("Enter message to send to the other player: ");
+    fgets(message, 4096, stdin);
+    socket_send(sockfd, message, strlen(message), 0);
+
+    socket_recv(sockfd, message, 4096, 0);
+    printf("Message from server: %s\n", message);
 
     /*
     int i;

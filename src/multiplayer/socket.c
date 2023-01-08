@@ -1,3 +1,4 @@
+#include <string.h>
 #include "socket.h"
 
 #ifdef _WIN32
@@ -64,6 +65,7 @@ int socket_send(int sockfd, const void *buf, size_t len, int flags) {
 }
 
 int socket_recv(int sockfd, void *buf, size_t len, int flags) {
+    buf = memset(buf, 0, len);
     return recv(sockfd, buf, len, flags);
 }
 
