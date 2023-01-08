@@ -1,13 +1,13 @@
 #include "main.h"
+#include "multiplayer/socket.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     int i;
     bool help = false;
     bool interactive = false;
-    char* filename = NULL;
+    char *filename = NULL;
     long benchmark = 0;
 
-    /* Skip argv[0] (program name). */
     for (i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
             help = true;

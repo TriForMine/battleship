@@ -1,7 +1,7 @@
 # Configurations
 
 PROGRAM_NAME = battleship
-PROGRAM_VERSION = v0.0.8
+PROGRAM_VERSION = v1.0.0
 
 # Do not to what comes after this line
 
@@ -60,6 +60,11 @@ debug: all
 
 release: CFLAGS += -static
 release: all
+
+# Build server from server/cargo.tml with cargo build --release
+server: directories
+	cd $(SOURCEDIR)/../server && cargo build --release
+	cp $(SOURCEDIR)/../server/target/release/server $(BUILDDIR)/server
 
 $(TARGET): $(OBJS)
 	@echo Linking $@

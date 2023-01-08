@@ -130,10 +130,103 @@ void printCurrentGame(Game* game) {
     printf("3. Quit (e.g. exit)\n\n");
 }
 
+Game *startOnlineGame(int *sockId, int *onlinePlayerId, int shipLengths[], int shipLengthsLengths) {
+    unsigned int* seed;
+    sockaddr_in serv_addr;
+    Game *game;
+    char message[BUFFER_SIZE];
+    char* ip = malloc(sizeof(char) * BUFFER_SIZE);
+    int port = 0;
+
+    seed = malloc_prof(sizeof(unsigned int));
+
+    *sockId = socket_create(AF_INET, SOCK_STREAM, 0);
+
+    printf("Please enter the server IP address ");
+    PRINT_YELLOW_TEXT("(127.0.0.1)");
+    printf(": ");
+
+    if (fgets(message, BUFFER_SIZE, stdin) != NULL) {
+        if (sscanf(message, "%15s", ip) != 1) {
+            strcpy(ip, "127.0.0.1");
+        }
+    } else {
+        strcpy(ip,  "127.0.0.1");
+    }
+
+    printf("Please enter the server port ");
+    PRINT_YELLOW_TEXT("(1234)");
+    printf(": ");
+
+    if (fgets(message, BUFFER_SIZE, stdin) != NULL) {
+        if (sscanf(message, "%d", &port) != 1) {
+            port = 1234;
+        }
+    } else {
+        port = 1234;
+    }
+
+    serv_addr.sin_family = AF_INET;
+    serv_addr.sin_port = htons(port);
+    if (inet_pton(AF_INET, ip, &serv_addr.sin_addr) != 1) {
+        perror("Error parsing IP address");
+        socket_close(*sockId);
+        exit(1);
+    }
+
+    if (socket_connect(*sockId, &serv_addr) < 0) {
+        perror("Error connecting to server");
+        socket_close(*sockId);
+        exit(1);
+    }
+
+    /* Get the seed from the server (format "seed (unsigned int)") */
+    socket_recv(*sockId, message, BUFFER_SIZE, 0);
+    sscanf(message, "seed %u", seed);
+
+    game = createGame(false, DISABLED, *seed, 10, 10);
+    placeRandomShips(getPlayerBoard(game, '1'), shipLengths, shipLengthsLengths);
+    placeRandomShips(getPlayerBoard(game, '2'), shipLengths, shipLengthsLengths);
+
+    printf("Asking the server for an available game...\n");
+    socket_recv(*sockId, message, 4096, 0);
+    printf("Message from server: %s\n", message);
+
+    if (strcmp(message, "Waiting for another player...") == 0) {
+        printf("\nWaiting for another player...\n\n");
+        socket_recv(*sockId, message, 4096, 0);
+        printf("Message from server: %s\n", message);
+        setGameTurnToPlayer1(game);
+        *onlinePlayerId = 1;
+    } else if (strcmp(message, "You are connected to the server") == 0) {
+        printf("\nYou are connected to the server\n\n");
+        setGameTurnToPlayer2(game);
+        printCurrentGame(game);
+        printf("Waiting for the other player to play ...\n\n");
+        socket_recv(*sockId, message, 4096, 0);
+        setGameTurnToPlayer1(game);
+        parseLine(game, message);
+        *onlinePlayerId = 2;
+    } else {
+        printf("Unknown message from server: %s\n", message);
+        exit(1);
+    }
+
+    game->state = PLAYING;
+
+    free_prof(seed);
+    free_prof(ip);
+
+    return game;
+}
+
 void handleInteractiveGame(void) {
     int shipLengths[] = {5, 4, 3, 3, 2};
     int shipLengthsLengths = 5;
 
+    int sockId;
+    bool isOnline = false;
+    int onlinePlayerId = 1;
     char buffer[BUFFER_SIZE];
     Game* game = NULL;
 
@@ -142,7 +235,23 @@ void handleInteractiveGame(void) {
     RESET_TEXT_COLOR();
 
     printf("Written by: Quentin Nicolini and Samy Ben dhiab\n\n");
-    game = startGame(shipLengths, shipLengthsLengths);
+
+    printf("Do you want to play offline or online?\n");
+    printf("1. Offline\n");
+    printf("2. Online\n");
+    printf("Please enter your choice ");
+    PRINT_YELLOW_TEXT("(1)");
+    printf(": ");
+
+    fgets(buffer, BUFFER_SIZE, stdin);
+    if (buffer[0] == '2') {
+        /* Play online */
+        game = startOnlineGame(&sockId, &onlinePlayerId, shipLengths, shipLengthsLengths);
+        isOnline = true;
+    } else {
+        /* Play offline */
+        game = startGame(shipLengths, shipLengthsLengths);
+    }
 
     printCurrentGame(game);
     while (game->state != ENDED && fgets(buffer, BUFFER_SIZE, stdin) != NULL) {
@@ -151,11 +260,19 @@ void handleInteractiveGame(void) {
             continue;
         }
 
+        if (isOnline) {
+            socket_send(sockId, buffer, strlen(buffer), 0);
+        }
+
         if (game->state == PLAYING && checkVictory(game)) {
             game->state = ENDED;
             clearConsole();
             printGame(game);
-            printf("Victory of player: 1\n");
+            if (isOnline) {
+                printf("You won!\n");
+            } else {
+                printf("Player %d won!\n", 2 - game->turn);
+            }
             break;
         }
 
@@ -163,11 +280,29 @@ void handleInteractiveGame(void) {
             performAiTurn(game);
         }
 
+        if (isOnline) {
+            clearConsole();
+            setGameTurnToOpponent(game);
+            printGame(game);
+            setGameTurnToOpponent(game);
+            printf("Waiting for opponent...\n");
+            socket_recv(sockId, buffer, BUFFER_SIZE, 0);
+            if (strcmp(buffer, "Your opponent left the game") == 0) {
+                printf("Opponent left the game\n");
+                break;
+            }
+            parseLine(game, buffer);
+        }
+
         if (game->state == PLAYING && checkVictory(game)) {
             game->state = ENDED;
             clearConsole();
             printGame(game);
-            printf("Victory of player: 2\n");
+            if (isOnline) {
+                printf("You lost!\n");
+            } else {
+                printf("Player %d won!\n", 2 - game->turn);
+            }
             break;
         }
         printCurrentGame(game);
