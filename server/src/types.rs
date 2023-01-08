@@ -9,6 +9,7 @@ use tokio::sync::Mutex;
 pub struct Room {
     pub(crate) player1: Player,
     pub(crate) player2: Option<Player>,
+    pub(crate) seed: u32,
 }
 
 impl Debug for Room {
@@ -16,6 +17,7 @@ impl Debug for Room {
         f.debug_struct("Room")
             .field("player1", &self.player1)
             .field("player2", &self.player2)
+            .field("seed", &self.seed)
             .finish()
     }
 }

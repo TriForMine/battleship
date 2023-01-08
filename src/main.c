@@ -1,49 +1,11 @@
 #include "main.h"
 #include "multiplayer/socket.h"
 
-int main(void) {
-    char message[4096];
-    int sockfd = socket_create(AF_INET, SOCK_STREAM, 0);
-
-    sockaddr_in serv_addr = {0};
-    serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(1234);
-    inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr);
-
-    if (socket_connect(sockfd, &serv_addr) < 0) {
-        perror("Error connecting to server");
-        socket_close(sockfd);
-        exit(1);
-    }
-
-    printf("Asking server for a room ...\n");
-
-    socket_recv(sockfd, message, 4096, 0);
-    printf("Message from server: %s\n", message);
-
-    if (strcmp(message, "Waiting for another player...") == 0) {
-        printf("\nWaiting for another player...\n\n");
-        socket_recv(sockfd, message, 4096, 0);
-        printf("Message from server: %s\n", message);
-    } else if (strcmp(message, "You are connected to the server") == 0) {
-        printf("\nYou are connected to the server\n\n");
-        printf("Waiting for the other player to play ...\n\n");
-        socket_recv(sockfd, message, 4096, 0);
-        printf("Message from server: %s\n", message);
-    }
-
-    printf("Enter message to send to the other player: ");
-    fgets(message, 4096, stdin);
-    socket_send(sockfd, message, strlen(message), 0);
-
-    socket_recv(sockfd, message, 4096, 0);
-    printf("Message from server: %s\n", message);
-
-    /*
+int main(int argc, char *argv[]) {
     int i;
     bool help = false;
     bool interactive = false;
-    char* filename = NULL;
+    char *filename = NULL;
     long benchmark = 0;
 
     for (i = 1; i < argc; i++) {
@@ -68,7 +30,7 @@ int main(void) {
         startBenchmark(benchmark);
     } else {
         parseSTDIN();
-    }*/
+    }
 
     return 0;
 }
