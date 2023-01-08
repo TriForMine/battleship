@@ -17,15 +17,25 @@ int main(void) {
         exit(1);
     }
 
+    printf("Asking server for a room ...\n");
+
     socket_recv(sockfd, message, 4096, 0);
     printf("Message from server: %s\n", message);
 
-    printf("Enter message to send to server: ");
-    fgets(message, 4096, stdin);
-    socket_send(sockfd, message, strlen(message), 0);
+    if (strcmp(message, "Hello player 2") == 0) {
+        socket_recv(sockfd, message2, 4096, 0);
+        printf("Message from server: %s\n", message2);
+    } else if (strcmp(message, "Waiting for another player...") == 0) {
+        socket_recv(sockfd, message2, 4096, 0);
+        printf("Message from server: %s\n", message2);
+    } else {
+        printf("Enter message to send to server: ");
+        fgets(message, 4096, stdin);
+        socket_send(sockfd, message, strlen(message), 0);
 
-    socket_recv(sockfd, message2, 4096, 0);
-    printf("Message from server: %s\n", message2);
+        socket_recv(sockfd, message2, 4096, 0);
+        printf("Message from server: %s\n", message2);
+    }
 
     /*
     int i;
