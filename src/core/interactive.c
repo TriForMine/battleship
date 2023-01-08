@@ -147,7 +147,7 @@ Game *startOnlineGame(int *sockId, int *onlinePlayerId, int shipLengths[], int s
     printf(": ");
 
     if (fgets(message, BUFFER_SIZE, stdin) != NULL) {
-        if (sscanf(message, "%s", ip) != 1) {
+        if (sscanf(message, "%15s", ip) != 1) {
             strcpy(ip, "127.0.0.1");
         }
     } else {
