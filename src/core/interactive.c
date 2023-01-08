@@ -135,8 +135,8 @@ Game *startOnlineGame(int *sockId, int *onlinePlayerId, int shipLengths[], int s
     sockaddr_in serv_addr;
     Game *game;
     char message[BUFFER_SIZE];
-    const char* ip;
-    const char* port;
+    char* ip = malloc(sizeof(char) * BUFFER_SIZE);
+    int port = 0;
 
     seed = malloc_prof(sizeof(unsigned int));
 
@@ -146,27 +146,35 @@ Game *startOnlineGame(int *sockId, int *onlinePlayerId, int shipLengths[], int s
     PRINT_YELLOW_TEXT("(127.0.0.1)");
     printf(": ");
 
-    if (fgets(message, BUFFER_SIZE, stdin) != NULL && strcmp(message, "\n") != 0) {
-        ip = strtok(message, "");
+    if (fgets(message, BUFFER_SIZE, stdin) != NULL) {
+        if (sscanf(message, "%s", ip) != 1) {
+            strcpy(ip, "127.0.0.1");
+        }
     } else {
-        ip = "127.0.0.1";
+        strcpy(ip,  "127.0.0.1");
     }
 
     printf("Please enter the server port ");
     PRINT_YELLOW_TEXT("(1234)");
     printf(": ");
 
-    if (fgets(message, BUFFER_SIZE, stdin) != NULL && strcmp(message, "\n") != 0) {
-        port = strtok(message, "");
+    if (fgets(message, BUFFER_SIZE, stdin) != NULL) {
+        if (sscanf(message, "%d", &port) != 1) {
+            port = 1234;
+        }
     } else {
-        port = "1234";
+        port = 1234;
     }
 
-    inet_pton(AF_INET, message, &serv_addr.sin_addr);
+    printf("Connecting to server at %s:%d...\n", ip, port);
 
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_port = htons(strtol(port, NULL, 10));
-    inet_pton(AF_INET, ip, &serv_addr.sin_addr);
+    serv_addr.sin_port = htonl(port);
+    if (inet_pton(AF_INET, ip, &serv_addr.sin_addr) != 1) {
+        perror("Error parsing IP address");
+        socket_close(*sockId);
+        exit(1);
+    }
 
     if (socket_connect(*sockId, &serv_addr) < 0) {
         perror("Error connecting to server");
@@ -209,6 +217,7 @@ Game *startOnlineGame(int *sockId, int *onlinePlayerId, int shipLengths[], int s
     game->state = PLAYING;
 
     free_prof(seed);
+    free_prof(ip);
 
     return game;
 }
