@@ -8,10 +8,10 @@
 int socket_create(int domain, int type, int protocol) {
 #ifdef _WIN32
     WSADATA wsa_data;
-  int result = WSAStartup(MAKEWORD(2, 2), &wsa_data);
-  if (result != 0) {
-    return -1;
-  }
+    int result = WSAStartup(MAKEWORD(2, 2), &wsa_data);
+    if (result != 0) {
+        return -1;
+    }
 #endif
 
     return socket(domain, type, protocol);
@@ -30,8 +30,8 @@ int socket_create_nonblocking(int domain, int type, int protocol) {
 
 #ifdef _WIN32
     if (ioctlsocket(sockfd, FIONBIO, &mode) != 0) {
-      socket_close(sockfd);
-      return -1;
+        socket_close(sockfd);
+        return -1;
     }
 #else
     if (flags < 0 || fcntl(sockfd, F_SETFL, flags | O_NONBLOCK) < 0) {
@@ -52,7 +52,11 @@ int socket_listen(int sockfd, int backlog) {
 }
 
 int socket_accept(int sockfd, sockaddr_in *addr) {
+# ifdef _WIN32
+    int addrlen = sizeof(sockaddr_in);
+#else
     socklen_t addrlen = sizeof(sockaddr_in);
+#endif
     return accept(sockfd, (sockaddr *) addr, &addrlen);
 }
 
