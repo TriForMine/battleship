@@ -3,6 +3,7 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
+#include <Ws2ipdef.h>   
 #include <io.h>
 #else
 
