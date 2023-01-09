@@ -50,9 +50,38 @@ jobs:
             ${{ matrix.name }}.sha256
             ${{ matrix.name }}
 
+  build-server:
+    name: Build Server (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: "Build Server"
+        run: |
+          make server
+          mv build/server battleship-server-linux
+
+      - name: "Calculate SHA-256 sum"
+        id: hash
+        run:
+          openssl dgst -sha256 -r battleship-server-linux | awk '{print $1}' > "battleship-server-linux.sha256"
+
+      - name: "Release | Upload artifacts"
+        uses: actions/upload-artifact@v3
+        with:
+          name: battleship
+          path: |
+            battleship-server-linux.sha256
+            battleship-server-linux
+
   upload_artifacts:
     name: Add Build Artifacts to Release
-    needs: tagged-release
+    needs:
+      - tagged-release
+      - build-server
     runs-on: ubuntu-latest
     steps:
       - name: Setup | Artifacts
