@@ -13,7 +13,7 @@ if (NOT DEFINED PROGRAM_VERSION)
     set(PROGRAM_VERSION "DEV")
 endif ()
 # Add PROGRAM_VERSION preprocessor definition
-add_compile_definitions(PROGRAM_VERSION= "${PROGRAM_VERSION}")
+add_compile_definitions(PROGRAM_VERSION="${PROGRAM_VERSION}")
 
 if (DEBUG)
     add_compile_definitions(DEBUG_MODE=1)
