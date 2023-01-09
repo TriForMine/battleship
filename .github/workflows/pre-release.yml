@@ -34,13 +34,10 @@ jobs:
         if: matrix.os != 'windows-latest'
         run: echo "SHORT_SHA=`echo ${{github.sha}} | cut -c1-8`" >> $GITHUB_ENV
         
-      - name: Print SHORT_SHA
-        run: echo "SHORT_SHA=${{ env.SHORT_SHA }}"
-        
       - name: "Build Project (Windows)"
         if: matrix.os == 'windows-latest'
         run: |
-          cmake -DPROGRAM_VERSION="${{ env.SHORT_SHA }}" -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -DPROGRAM_VERSION="${{env.SHORT_SHA}}" -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
           cmake --build build -- -j 2
           mv build\battleship.exe ${{ matrix.name }}
 
