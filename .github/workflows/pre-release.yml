@@ -26,20 +26,20 @@ jobs:
         with:
           fetch-depth: 1
           
-      - name: Add SHORT_SHA env property with commit short sha
-        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      - name: Get short SHA
+        run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
 
       - name: "Build Project (Windows)"
         if: matrix.os == 'windows-latest'
         run: |
-          cmake -DPROGRAM_VERSION="${SHORT_SHA}" -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
+          cmake -DPROGRAM_VERSION="${{ env.SHORT_SHA }}" -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build
           cmake --build build -- -j 2
           mv build\battleship.exe ${{ matrix.name }}
 
       - name: "Build Project (Linux/macOS)"
         if: matrix.os != 'windows-latest'
         run: |
-          make PROGRAM_VERSION=${SHORT_SHA} release
+          make PROGRAM_VERSION=${{ env.SHORT_SHA }} release
           mv build/battleship ${{ matrix.name }}
 
       - name: "Calculate SHA-256 sum"
