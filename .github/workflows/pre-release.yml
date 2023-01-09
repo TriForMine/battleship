@@ -31,6 +31,7 @@ jobs:
         run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
         
       - name: Get short SHA (Linux)
+        if: matrix.os != 'windows-latest'
         run: echo "SHORT_SHA=`git rev-parse --short HEAD`" >> $env:GITHUB_ENV
 
       - name: "Build Project (Windows)"
