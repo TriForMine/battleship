@@ -7,6 +7,8 @@ location of each other's ships on a grid. When a player misses a ship, a mine is
 all of one player's ships have been sunk. Players can move their ships and attack their opponent's ships on each turn.
 The game also includes three types of AI that players can compete against.
 
+In addition, the game now features online multiplayer, using a game server written in Rust. The server only handles turn-by-turn broadcast of actions to the other player, and does not check for cheats or incorrect commands.
+
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/TriForMine/battleship)
 ![GitHub](https://img.shields.io/github/license/TriForMine/battleship)
 ![GitHub last commit](https://img.shields.io/github/last-commit/TriForMine/battleship) <br/>
@@ -141,6 +143,18 @@ cat test/format0.txt | ./build/battleship
 ```sh
 ./build/battleship -f test/format0.txt
 ```
+
+## Server
+To build and run the server for the Battleship game, you have several options:
+
+1. **Using Makefile:** You can use the command `make server` in the root directory of the project to build the server.
+Once the build is complete, you can run the server using `./build/server`
+
+2. **Downloading from GitHub Releases:** You can download a pre-built binary of the server from the [GitHub releases page](https://github.com/TriForMine/battleship/releases) and run it on your machine.
+
+3. **Building from source with Cargo:** To build the server from source, navigate to the `server` directory and run `cargo build --release`. This will build the server in release mode and you can find the binary in the `target/release` folder. You can run the server by executing `./target/release/server`.
+
+**NOTE:** Make sure you have rust and cargo installed before trying to build the server with cargo or the Makefile, otherwise the command will not work.
 
 ## Contributions
 
